@@ -4,6 +4,8 @@
     <string name="title_activity_play">PlayActivity</string>
     <string name="time_keeper"> Time: </string>
     <string name="hello_world">Hello world!</string>
-    <string name="brickTapString">Taps: 0</string>
+    <string name="brickTapString">0</string>
     <string name="scoreText"> Score </string>
+    <string name="round"> Round </string>
+    <string name="tap"> Taps:</string>
 </resources>

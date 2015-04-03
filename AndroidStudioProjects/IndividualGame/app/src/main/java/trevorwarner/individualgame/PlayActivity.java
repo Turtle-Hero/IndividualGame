@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 public class PlayActivity extends ActionBarActivity {
@@ -23,12 +23,15 @@ public class PlayActivity extends ActionBarActivity {
     private int score;
     private TextView brickView;
     private TextView scoreKeeper;
+    private TextView roundKeeper;
     private TextView timeKeeper;
     private String timeSec;
     private String timeMilli;
     private String brickTapString;
     private ImageButton brickButton;
     long millis;
+    Timer cdTimer;
+    int roundCount = 0;
     private String TAG = " TAG ";
 
     @Override
@@ -37,14 +40,17 @@ public class PlayActivity extends ActionBarActivity {
         setContentView(R.layout.activity_play);
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
+        roundKeeper = (TextView) findViewById(R.id.roundKeeper);
         timeKeeper = (TextView) findViewById(R.id.timeKeeper);
         brickButton = (ImageButton) findViewById(R.id.brickButton);
+        newRound();
         setHealthMarks();
         brickButton.setOnClickListener(brickListener);
 
         timeKeeper.setText("10:00");
 
-        timer(); //starts the 10sec countdown
+       cdTimer = new Timer(10000, 10);
+       cdTimer.start(); //starts the 10sec countdown
 
     }
 
@@ -54,17 +60,16 @@ public class PlayActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
            brickTapSetter();
-
            updateBrickHealth();
         }
     };
 
     //display the # of taps
     public void brickTapSetter() {
-        brickTapString = brickView.getText().toString();
-        brickTapString = brickTapString.substring(0, 5);
-        brickTapCount++;
-        brickView.setText(brickTapString + " " + brickTapCount);
+        if (brickHealth > 0) {
+            brickTapCount++;
+        }
+        brickView.setText(""+brickTapCount);
     }
 
     //updates the health values for brick
@@ -77,7 +82,10 @@ public class PlayActivity extends ActionBarActivity {
             brickButton.setImageResource(R.drawable.broken_brick);
         }
         if (brickHealth == 0){
+            cdTimer.cancel();
+            brickButton.setImageResource(R.drawable.pile_rocks);
             updateScore();
+            endRound();
 
         }
     }
@@ -95,9 +103,11 @@ public class PlayActivity extends ActionBarActivity {
         scoreKeeper.setText("" + score);
     }
     //countdown timer accurate to tenths place
-    public void timer() {
-        new  CountDownTimer(10000, 10) {
+    public class Timer extends CountDownTimer {
 
+        public Timer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
             @Override
             public void onTick(long millisUntilFinished) {
                 millis = millisUntilFinished;
@@ -109,12 +119,24 @@ public class PlayActivity extends ActionBarActivity {
                 timeKeeper.setText(timeSec + "." + timeMilli);
 
             }
-
             @Override
             public void onFinish() {
                 timeKeeper.setText("0.0");
             }
-        }.start();
+
+    }
+
+    public void roundToast() {
+        Toast toast = new Toast(PlayActivity.this);
+    }
+
+    public void newRound() {
+        roundCount++;
+        roundKeeper.setText("" + roundCount);
+        roundToast();
+    }
+
+    public void endRound() {
 
     }
 
