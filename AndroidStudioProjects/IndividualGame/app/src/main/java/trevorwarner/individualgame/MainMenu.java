@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ImageButton;
 
 //comment for sharing on GitHub
+
+//Play Button Taken from http://buyadoo.com/css-Animated-Button/
+//LeaderBoard Icon taken from http://corporaterewards.com/automating-sales-incentives-telecommunications-giant/
 public class MainMenu extends ActionBarActivity {
 
     @Override
@@ -18,6 +21,9 @@ public class MainMenu extends ActionBarActivity {
 
         ImageButton playButton = (ImageButton) findViewById(R.id.playButton);
         playButton.setOnClickListener(playListener);
+
+        ImageButton leaderBoard = (ImageButton) findViewById(R.id.LButton);
+        leaderBoard.setOnClickListener(leaderBoardListener);
     }
 
     View.OnClickListener playListener = new View.OnClickListener() {
@@ -29,8 +35,14 @@ public class MainMenu extends ActionBarActivity {
         }
     };
 
+    View.OnClickListener leaderBoardListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(MainMenu.this, LeaderBoard.class);
+            startActivity(i);
+        }
+    };
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_menu, menu);

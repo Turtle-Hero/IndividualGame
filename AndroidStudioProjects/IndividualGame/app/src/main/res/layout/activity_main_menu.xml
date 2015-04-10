@@ -8,7 +8,7 @@
 
     <ImageButton
         android:layout_width="275dp"
-        android:layout_height="125dp"
+        android:layout_height="115dp"
         android:id="@+id/playButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -17,4 +17,16 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:background="#E6E6E6" />
+
+    <ImageButton
+        android:layout_width="220dp"
+        android:layout_height="150dp"
+        android:id="@+id/LButton"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/leaderboard"
+        android:adjustViewBounds="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:background="@null" />
 </RelativeLayout>

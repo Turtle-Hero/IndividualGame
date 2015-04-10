@@ -114,4 +114,5 @@
         android:layout_toLeftOf="@+id/brickCount"
         android:layout_toStartOf="@+id/brickCount" />
 
+
 </RelativeLayout>
