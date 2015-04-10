@@ -17,35 +17,91 @@
         android:layout_gravity="center_horizontal"
         android:textSize="30dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/first"
-        android:id="@+id/firstPlace"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/LBpadding"
-        android:paddingBottom="@dimen/LBpadding" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_gravity="center_horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/second"
-        android:id="@+id/secondPlace"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/LBpadding"
-        android:paddingBottom="@dimen/LBpadding" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/first_trophy"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/firstPlace"
+            android:layout_toStartOf="@+id/firstPlace" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/third"
-        android:id="@+id/thirdPlace"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/LBpadding"
-        android:paddingBottom="@dimen/LBpadding" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/first"
+            android:id="@+id/firstPlace"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/LBpadding"
+            android:paddingBottom="@dimen/LBpadding"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="103dp"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageView3"
+            android:src="@drawable/second_trophy"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/secondPlace"
+            android:layout_toStartOf="@+id/secondPlace" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/second"
+            android:id="@+id/secondPlace"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/LBpadding"
+            android:paddingBottom="@dimen/LBpadding"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/third"
+            android:id="@+id/thirdPlace"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/LBpadding"
+            android:paddingBottom="@dimen/LBpadding"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageView4"
+            android:src="@drawable/third_trophy"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/thirdPlace"
+            android:layout_toStartOf="@+id/thirdPlace"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

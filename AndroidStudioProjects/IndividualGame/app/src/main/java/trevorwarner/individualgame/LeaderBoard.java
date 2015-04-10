@@ -13,7 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+//leaderboard 1st place trophy image found from iconFinder.com
+//All trophy images were modified from that image
 public class LeaderBoard extends ActionBarActivity {
 
     String firstVal, secondVal, thirdVal;
