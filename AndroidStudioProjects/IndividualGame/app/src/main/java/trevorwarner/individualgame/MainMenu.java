@@ -19,6 +19,7 @@ public class MainMenu extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        //initialize Play and Leaderboard button w/Listeners
         ImageButton playButton = (ImageButton) findViewById(R.id.playButton);
         playButton.setOnClickListener(playListener);
 
@@ -26,6 +27,7 @@ public class MainMenu extends ActionBarActivity {
         leaderBoard.setOnClickListener(leaderBoardListener);
     }
 
+    //Open Activity where game happens
     View.OnClickListener playListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -35,6 +37,7 @@ public class MainMenu extends ActionBarActivity {
         }
     };
 
+    //Open LeaderBoard activity
     View.OnClickListener leaderBoardListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

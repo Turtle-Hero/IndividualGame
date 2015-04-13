@@ -29,6 +29,7 @@ brick rubble.
  */
 public class PlayActivity extends ActionBarActivity {
 
+    //
     private int brickTapCount;
     private int brickHealth;
     private int prevRoundHealth;
@@ -55,23 +56,29 @@ public class PlayActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        //hides actionbar
         actionbar = getSupportActionBar();
         actionbar.hide();
+        //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
         roundKeeper = (TextView) findViewById(R.id.roundKeeper);
         timeKeeper = (TextView) findViewById(R.id.timeKeeper);
         brickButton = (ImageButton) findViewById(R.id.brickButton);
+        //Shows startTime for Round
         timeKeeper.setText("10.0");
+        //initialize brick hit noise
         buttonHitSound = new SoundPool(15, AudioManager.STREAM_MUSIC,1);
         soundID = buttonHitSound.load(this, R.raw.hit_sound, 1);
         brickButton.setOnClickListener(brickListener);
+        //initializes countdown timer
         cdTimer = new Timer(10000, 10);
 
         newRound();
 
     }
 
+    //starts every round. Updates round #, creates new brick image, updates brick health
     public void newRound() {
         roundCount++;
         newBrick();
@@ -81,6 +88,7 @@ public class PlayActivity extends ActionBarActivity {
     }
 
 
+    //displays round # in an alert, + start button click starts timer
     public void roundAlert() {
         //General syntax for making a custom text view for an alert was found on StackOverflow
         AlertDialog.Builder newRoundAlert = new AlertDialog.Builder(this);
@@ -103,7 +111,7 @@ public class PlayActivity extends ActionBarActivity {
         alert.show();
     }
 
-
+    //on a brick hit, play brick hit sound, update tap amount and update brick health
     View.OnClickListener brickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -121,7 +129,7 @@ public class PlayActivity extends ActionBarActivity {
         brickView.setText(""+brickTapCount);
     }
 
-    //updates the health values for brick
+    //updates the health values for brick and brick image
     public void updateBrickHealth() {
         brickHealth--;
         if (brickHealth == twoThirdsHealth){
@@ -146,10 +154,12 @@ public class PlayActivity extends ActionBarActivity {
         }
     }
 
+    //creates new brick image
     public void newBrick() {
         brickButton.setImageResource(R.drawable.brick);
     }
 
+    //sets brick health each round
     public void setHealthMarks() {
         if (roundCount == 1){
             totalBrickHealth = 3;
@@ -170,6 +180,7 @@ public class PlayActivity extends ActionBarActivity {
 
 
 
+    //resets variables and textviews, then initializes new round.
     public void endRound () {
        brickTapCount = 0;
        brickView.setText("" + 0);
@@ -178,6 +189,8 @@ public class PlayActivity extends ActionBarActivity {
        newRound();
     }
 
+    //stores score in shared preference for leaderboard
+    //starts alert for Main Menu + leaderboard navigation
     public void endGame() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
