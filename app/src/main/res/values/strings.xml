@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IndividualGame</string>
+    <string name="app_name">Brick Bash</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_play">PlayActivity</string>
     <string name="time_keeper"> Time: </string>
