@@ -106,12 +106,14 @@ public class PlayActivity extends ActionBarActivity {
                 cdTimer.start();
             }
         });
-      /*  newRoundAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//Hitting the back button no longer allows a player to play the round with no timer
+//Can either end activity as done here or start the round anyway
+        newRoundAlert.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
                 finish();
             }
-        }); */
+        });
 
 
         AlertDialog alert = newRoundAlert.create();
@@ -278,7 +280,8 @@ public class PlayActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//added to stop timer on activity pause
+//Stops timer when activity is paused so that CountDownTimer cdTimer will not cause
+//application to crash
     @Override
     protected void onPause() {
         super.onPause();
