@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ brick rubble.
 -The brick hitting noise was taken from http://soundbible.com/tags-karate.html
  */
 public class PlayActivity extends ActionBarActivity {
-
+    public static final String TAG = "BrickBash";
     //
     private int brickTapCount;
     private int brickHealth;
@@ -105,10 +106,17 @@ public class PlayActivity extends ActionBarActivity {
                 cdTimer.start();
             }
         });
+      /*  newRoundAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        }); */
 
 
         AlertDialog alert = newRoundAlert.create();
         alert.show();
+
     }
 
     //on a brick hit, play brick hit sound, update tap amount and update brick health
@@ -269,4 +277,13 @@ public class PlayActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+//added to stop timer on activity pause
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cdTimer.cancel();
+    }
+
+
 }
