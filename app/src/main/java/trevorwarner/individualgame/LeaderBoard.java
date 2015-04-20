@@ -119,6 +119,7 @@ public class LeaderBoard extends ActionBarActivity {
         builder.setTitle("Please Enter Your Name");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+
         builder.setView(input);
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
