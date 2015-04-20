@@ -8,9 +8,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +28,8 @@ public class LeaderBoard extends ActionBarActivity {
     int nameIndex;
     int newScore;
     String newName;
-
+    ActionBar myBar;
     Button button;
-    ActionBar actionbar;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     ArrayList<Integer> scoreList = new ArrayList<>();
@@ -44,8 +41,10 @@ public class LeaderBoard extends ActionBarActivity {
         prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
         editor = prefs.edit();
         setContentView(R.layout.activity_leader_board);
-        actionbar = getSupportActionBar();
-        actionbar.hide();
+
+        myBar = getSupportActionBar();
+        myBar.setTitle("Brick Bash");
+
         first = (TextView) findViewById(R.id.firstPlace);
         second = (TextView) findViewById(R.id.secondPlace);
         third = (TextView) findViewById(R.id.thirdPlace);
@@ -118,18 +117,24 @@ public class LeaderBoard extends ActionBarActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Your Name");
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+       builder.setView(input);
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
 
         builder.setView(input);
+
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 newName = input.getText().toString() + " ";
-                if (nameList.contains(newName)){
-                    updateContainsName();
-                }else {
-                    updateScore(newScore);
+                if (validated(input, newName)) {
+                    if (nameList.contains(newName)) {
+                        updateContainsName();
+                    } else {
+                        updateScore(newScore);
+                    }
+                } else {
+                    namePrompt();
                 }
             }
         });
@@ -160,6 +165,29 @@ public class LeaderBoard extends ActionBarActivity {
             }
 
         saveChanges();
+    }
+
+    public boolean validated(EditText input, String name){
+        if (name.length() > 13){
+            Toast toast = Toast.makeText(getBaseContext(), "Name must be 12 characters or less", Toast.LENGTH_LONG);
+            toast.setGravity( Gravity.CENTER, 0, 0);
+            toast.show();
+            return false;
+        }
+        for(int i = 0; i< name.length(); i++){
+            char c = name.charAt(i);
+
+            if(Character.isDigit(c))
+            {
+                input.getText().clear();
+                Toast toast = Toast.makeText(getBaseContext(), "No Digits Allowed", Toast.LENGTH_LONG);
+                toast.setGravity( Gravity.CENTER, 0, 0);
+                toast.show();
+
+                return false;
+            }
+        }
+        return true;
     }
 
     public void updateContainsName() {
@@ -222,7 +250,7 @@ public class LeaderBoard extends ActionBarActivity {
         editor.putString("SavedFourth", fourth.getText().toString());
         editor.putString("SavedFifth", fifth.getText().toString());
         editor.remove("SavedScore");
-        editor.commit();
+        editor.apply();
     }
 
     View.OnClickListener menuListener = new View.OnClickListener() {
@@ -245,14 +273,20 @@ public class LeaderBoard extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+       switch (item.getItemId()){
+           case R.id.action_settings:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+               return true;
 
-        return super.onOptionsItemSelected(item);
+           case R.id.action_Reset:
+               editor.clear();
+               editor.apply();
+               finish();
+               return true;
+
+           default:
+               return super.onOptionsItemSelected(item);
+       }
     }
 }
 
