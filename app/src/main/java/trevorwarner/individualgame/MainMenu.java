@@ -1,6 +1,7 @@
 package trevorwarner.individualgame;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +32,11 @@ public class MainMenu extends ActionBarActivity {
     View.OnClickListener playListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+            //SharedPreferences.Editor editor = prefs.edit();
+            //editor.clear();
+            //editor.commit();
+
             Intent intent = new Intent(MainMenu.this, PlayActivity.class);
 
             startActivity(intent);

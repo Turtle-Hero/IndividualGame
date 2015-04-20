@@ -66,8 +66,7 @@ public class PlayActivity extends ActionBarActivity {
         roundKeeper = (TextView) findViewById(R.id.roundKeeper);
         timeKeeper = (TextView) findViewById(R.id.timeKeeper);
         brickButton = (ImageButton) findViewById(R.id.brickButton);
-        //Shows startTime for Round
-        timeKeeper.setText("10.0");
+
         //initialize brick hit noise
         buttonHitSound = new SoundPool(15, AudioManager.STREAM_MUSIC,1);
         soundID = buttonHitSound.load(this, R.raw.hit_sound, 1);
@@ -81,10 +80,13 @@ public class PlayActivity extends ActionBarActivity {
 
     //starts every round. Updates round #, creates new brick image, updates brick health
     public void newRound() {
-        roundCount++;
         newBrick();
+        roundCount++;
         roundKeeper.setText("" + roundCount);
         setHealthMarks();
+        //Shows startTime for Round
+        timeKeeper.setText("10.0");
+        //starts timer when Start dialog button is clicked
         roundAlert();
     }
 
@@ -100,7 +102,7 @@ public class PlayActivity extends ActionBarActivity {
         custom.setGravity(Gravity.CENTER_HORIZONTAL);
 
         newRoundAlert.setView(custom);
-        newRoundAlert.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+        newRoundAlert.setNeutralButton("Start", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 cdTimer.start();

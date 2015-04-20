@@ -12,4 +12,6 @@
     <string name="third">3rd: </string>
     <string name="title_activity_leader_board">LeaderBoard</string>
     <string name="menuString">Menu</string>
+    <string name="fourth">4th: </string>
+    <string name="fifth">5th: </string>
 </resources>
