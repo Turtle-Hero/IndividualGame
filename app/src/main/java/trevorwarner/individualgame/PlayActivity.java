@@ -30,9 +30,10 @@ brick rubble.
  */
 public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
-    //
+
+    private Upgrades upgrades;
     private int brickTapCount;
-    private int brickHealth;
+    private double brickHealth;
     private int prevRoundHealth;
     private int totalBrickHealth;
     private int twoThirdsHealth;
@@ -52,6 +53,7 @@ public class PlayActivity extends ActionBarActivity {
     Timer cdTimer;
     ActionBar actionbar;
     int roundCount = 0;
+    double clickPower = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,26 +145,18 @@ public class PlayActivity extends ActionBarActivity {
 
     //updates the health values for brick and brick image
     public void updateBrickHealth() {
-        brickHealth--;
-        if (brickHealth == twoThirdsHealth){
+        brickHealth = brickHealth - clickPower;
+        //brickHealth--;
+        if (brickHealth <= twoThirdsHealth && brickHealth > oneThirdHealth){
             brickButton.setImageResource(R.drawable.cracked_brick);
         }
-        if ( brickHealth == oneThirdHealth ){
+        if ( brickHealth <= oneThirdHealth && brickHealth > 0){
             brickButton.setImageResource(R.drawable.broken_brick);
         }
-        if (brickHealth == 0){
+        if (brickHealth <= 0){
             cdTimer.cancel();
             brickButton.setImageResource(R.drawable.pile_rocks);
-            updateScore();
-            //postDelayed method creating a new runnable inner class found on StackOverflow
-            myHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    endRound();
-                }
-            }, 1000);
-
-
+            endRound();
         }
     }
 
@@ -194,11 +188,18 @@ public class PlayActivity extends ActionBarActivity {
 
     //resets variables and textviews, then initializes new round.
     public void endRound () {
+       updateScore();
        brickTapCount = 0;
        brickView.setText("" + 0);
        totalBrickHealth = totalBrickHealth + (1 + totalBrickHealth / 2);
        brickHealth = totalBrickHealth;
-       newRound();
+       //newRound();
+        myHandler.postDelayed(new Runnable() {
+          @Override
+        public void run() {
+            newRound();
+            }
+        }, 1000);
     }
 
     //stores score in shared preference for leaderboard
