@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +36,7 @@ public class LeaderBoard extends ActionBarActivity {
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     ArrayList<Integer> scoreList = new ArrayList<>();
-    ArrayList<String> nameList = new ArrayList<>();
+    ArrayList<String> nameList = new CustomStringList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,16 +118,16 @@ public class LeaderBoard extends ActionBarActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Your Name");
         final EditText input = new EditText(this);
-        input.setMaxEms(5);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 newName = input.getText().toString() + " ";
-                if (nameList.contains(newName)) {
+                if (nameList.contains(newName)){
                     updateContainsName();
-                } else {
+                }else {
                     updateScore(newScore);
                 }
             }
@@ -162,7 +163,16 @@ public class LeaderBoard extends ActionBarActivity {
 
     public void updateContainsName() {
         //if the name is already in the leaderboard
-        nameIndex = nameList.indexOf(newName);
+
+        //nameIndex = nameList.indexOf(newName);
+
+        for (int i = 0; i < nameList.size(); i++){
+            if (nameList.get(i).equalsIgnoreCase(newName)){
+                nameIndex = i;
+                break;
+            }
+        }
+
         //find index (place) of name
         //if the entered name got a new highscore, replace old score with new score and re-order
         //replacing score -> delete score and name from both array lists and add placeholders to avoid indexOutOfBounds
@@ -244,4 +254,16 @@ public class LeaderBoard extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
+class CustomStringList extends ArrayList<String> {
+    @Override
+    public boolean contains(Object o) {
+        String paramStr = (String)o;
+        for (String s : this) {
+            if (paramStr.equalsIgnoreCase(s)) return true;
+        }
+        return false;
+    }
+}
+
 
