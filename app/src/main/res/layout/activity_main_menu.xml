@@ -20,7 +20,7 @@
         android:layout_marginTop="5dp" />
 
     <ImageButton
-        android:layout_width="210dp"
+        android:layout_width="150dp"
         android:layout_height="100dp"
         android:id="@+id/LButton"
         android:src="@drawable/leaderboard"
@@ -29,7 +29,6 @@
         android:background="@null"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" />
 
     <ImageView
@@ -41,4 +40,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="5dp" />
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:id="@+id/UButton"
+        android:layout_alignBottom="@+id/LButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@android:drawable/btn_star_big_on"
+        android:background="@null"
+        android:scaleType="fitCenter" />
 </RelativeLayout>

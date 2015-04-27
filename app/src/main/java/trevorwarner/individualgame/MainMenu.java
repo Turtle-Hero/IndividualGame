@@ -26,6 +26,9 @@ public class MainMenu extends ActionBarActivity {
 
         ImageButton leaderBoard = (ImageButton) findViewById(R.id.LButton);
         leaderBoard.setOnClickListener(leaderBoardListener);
+
+        ImageButton upgrade = (ImageButton) findViewById(R.id.UButton);
+        upgrade.setOnClickListener(upgradeListener);
     }
 
     //Open Activity where game happens
@@ -48,6 +51,14 @@ public class MainMenu extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             Intent i = new Intent(MainMenu.this, LeaderBoard.class);
+            startActivity(i);
+        }
+    };
+
+    View.OnClickListener upgradeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(MainMenu.this, UpgradesShop.class);
             startActivity(i);
         }
     };

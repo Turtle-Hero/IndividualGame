@@ -7,8 +7,9 @@ package trevorwarner.individualgame;
  */
 public class Upgrades {
 
-    private double clickPower (int oldPower){
-        double newPower = oldPower + (oldPower * .1);
+    public double clickPower (double oldPower){
+        //double newPower = oldPower + (oldPower * .1);
+        double newPower = oldPower * 2;
         return newPower;
     }
 
