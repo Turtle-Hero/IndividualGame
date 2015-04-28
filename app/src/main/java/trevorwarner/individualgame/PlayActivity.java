@@ -129,6 +129,7 @@ public class PlayActivity extends ActionBarActivity {
         WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
         wmlp.gravity = Gravity.TOP;
         wmlp.y = 150;
+        alert.setCancelable(false);
         alert.show();
 
     }
@@ -291,7 +292,7 @@ public class PlayActivity extends ActionBarActivity {
     }
 
 //Stops timer when activity is paused so that CountDownTimer cdTimer will not cause
-//application to crash
+//application to crash.
     @Override
     protected void onPause() {
         super.onPause();
