@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class PlayActivity extends ActionBarActivity {
     private ImageButton brickButton;
     int soundID;
     long millis;
+    boolean endRoundState = false;
     Handler myHandler = new Handler();
     SoundPool buttonHitSound;
     Timer cdTimer;
@@ -82,9 +84,14 @@ public class PlayActivity extends ActionBarActivity {
 
     //starts every round. Updates round #, creates new brick image, updates brick health
     public void newRound() {
+        endRoundState = false;
         newBrick();
+        brickTapCount = 0;
+        brickView.setText("" + 0);
+        //updates and sets to textview Round count
         roundCount++;
         roundKeeper.setText("" + roundCount);
+        //sets brick health benchmarks
         setHealthMarks();
         //Shows startTime for Round
         timeKeeper.setText("10.0");
@@ -102,7 +109,6 @@ public class PlayActivity extends ActionBarActivity {
         custom.setTextSize(35);
         custom.setGravity(Gravity.CENTER_VERTICAL);
         custom.setGravity(Gravity.CENTER_HORIZONTAL);
-
         newRoundAlert.setView(custom);
         newRoundAlert.setNeutralButton("Start", new DialogInterface.OnClickListener() {
             @Override
@@ -119,8 +125,11 @@ public class PlayActivity extends ActionBarActivity {
             }
         });
 
-
         AlertDialog alert = newRoundAlert.create();
+        WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
+        wmlp.gravity = Gravity.TOP;
+        wmlp.y = 150;
+        alert.setCancelable(false);
         alert.show();
 
     }
@@ -130,8 +139,10 @@ public class PlayActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
            buttonHitSound.play(soundID,1,1,1,0,1);
-           brickTapSetter();
-           updateBrickHealth();
+           if (!endRoundState) {
+               brickTapSetter();
+               updateBrickHealth();
+           }
         }
     };
 
@@ -139,21 +150,19 @@ public class PlayActivity extends ActionBarActivity {
     public void brickTapSetter() {
         if (brickHealth > 0) {
             brickTapCount++;
+            brickView.setText(""+brickTapCount);
         }
-        brickView.setText(""+brickTapCount);
     }
 
     //updates the health values for brick and brick image
     public void updateBrickHealth() {
         brickHealth = brickHealth - clickPower;
         //brickHealth--;
-        if (brickHealth <= twoThirdsHealth && brickHealth > oneThirdHealth){
+        if ( (brickHealth <= twoThirdsHealth) && (brickHealth > oneThirdHealth) ){
             brickButton.setImageResource(R.drawable.cracked_brick);
-        }
-        if ( brickHealth <= oneThirdHealth && brickHealth > 0){
+        } else if ( brickHealth <= oneThirdHealth && brickHealth > 0){
             brickButton.setImageResource(R.drawable.broken_brick);
-        }
-        if (brickHealth <= 0){
+        } else if (brickHealth <= 0){
             cdTimer.cancel();
             brickButton.setImageResource(R.drawable.pile_rocks);
             endRound();
@@ -188,16 +197,15 @@ public class PlayActivity extends ActionBarActivity {
 
     //resets variables and textviews, then initializes new round.
     public void endRound () {
+       endRoundState = true;
        updateScore();
-       brickTapCount = 0;
-       brickView.setText("" + 0);
        totalBrickHealth = totalBrickHealth + (1 + totalBrickHealth / 2);
        brickHealth = totalBrickHealth;
        //newRound();
         myHandler.postDelayed(new Runnable() {
-          @Override
-        public void run() {
-            newRound();
+            @Override
+            public void run() {
+                newRound();
             }
         }, 1000);
     }
@@ -284,7 +292,7 @@ public class PlayActivity extends ActionBarActivity {
     }
 
 //Stops timer when activity is paused so that CountDownTimer cdTimer will not cause
-//application to crash
+//application to crash.
     @Override
     protected void onPause() {
         super.onPause();
