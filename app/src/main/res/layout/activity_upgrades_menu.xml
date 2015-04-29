@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffc948"
+    tools:context="trevorwarner.individualgame.UpgradesShop">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upgrades"
+        android:id="@+id/upgrades_title_textview"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:textSize="35dp" />
+
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="450dp"
+        android:columnCount="3"
+        android:rowCount="3"
+        android:padding="2dp"
+        android:useDefaultMargins="true">
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/clickUpgrade"
+            android:src="@android:drawable/ic_menu_compass"
+            android:layout_gravity="center_horizontal|top"
+            android:paddingTop="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textView"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_gravity="center_horizontal|bottom"
+            android:text="Click Power-Up" />
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+
+        <Button
+            android:layout_width="175dp"
+            android:layout_height="50dp"
+            android:text="Menu"
+            android:id="@+id/menuButton"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</LinearLayout>
