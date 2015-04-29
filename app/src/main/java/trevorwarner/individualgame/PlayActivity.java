@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 /*
@@ -33,6 +33,7 @@ public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
 
     private Upgrades upgrades;
+    private BrickBit brickBits;
     private int brickTapCount;
     private double brickHealth;
     private int prevRoundHealth;
@@ -47,6 +48,7 @@ public class PlayActivity extends ActionBarActivity {
     private String timeSec;
     private String timeMilli;
     private ImageButton brickButton;
+    private SharedPreferences prefs;
     int soundID;
     long millis;
     boolean endRoundState = false;
@@ -66,6 +68,9 @@ public class PlayActivity extends ActionBarActivity {
         //hides actionbar
         actionbar = getSupportActionBar();
         actionbar.hide();
+
+        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+
         //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
@@ -81,6 +86,7 @@ public class PlayActivity extends ActionBarActivity {
         cdTimer = new Timer(10000, 10);
 
         upgrades = new Upgrades();
+        brickBits = BrickBit.getMainBrickBitBank(prefs);
 
         checkUpgrades();
         newRound();
@@ -218,8 +224,14 @@ public class PlayActivity extends ActionBarActivity {
     //stores score in shared preference for leaderboard
     //starts alert for Main Menu + leaderboard navigation
     public void endGame() {
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+
+        brickBits.increaseBrickBits(score);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "BrickBits = " + brickBits.getBrickBits(), Toast.LENGTH_SHORT);
+        toast.show();
+
+
         editor.putInt("SavedScore", score);
         editor.commit();
         final Intent intent = new Intent(PlayActivity.this, LeaderBoard.class);
