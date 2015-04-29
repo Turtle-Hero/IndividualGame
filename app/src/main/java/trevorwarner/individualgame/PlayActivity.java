@@ -80,6 +80,8 @@ public class PlayActivity extends ActionBarActivity {
         //initializes countdown timer
         cdTimer = new Timer(10000, 10);
 
+        upgrades = new Upgrades();
+
         checkUpgrades();
         newRound();
 
