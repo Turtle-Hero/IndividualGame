@@ -55,7 +55,9 @@ public class PlayActivity extends ActionBarActivity {
     Timer cdTimer;
     ActionBar actionbar;
     int roundCount = 0;
+
     double clickPower = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class PlayActivity extends ActionBarActivity {
         //initializes countdown timer
         cdTimer = new Timer(10000, 10);
 
+        checkUpgrades();
         newRound();
 
     }
@@ -297,6 +300,15 @@ public class PlayActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         cdTimer.cancel();
+    }
+
+    public void checkUpgrades() {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        Boolean clickPowerBoolean = prefs.getBoolean("clickPowerBoolean", false);
+        if (clickPowerBoolean == true){
+            clickPower = upgrades.clickPower(clickPower);
+        }
+
     }
 
 

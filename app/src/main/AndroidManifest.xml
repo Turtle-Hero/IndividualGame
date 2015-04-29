@@ -26,6 +26,11 @@
             android:name=".LeaderBoard"
             android:label="@string/title_activity_leader_board" >
         </activity>
+        <activity
+            android:name="UpgradesShop"
+            android:label="UpgradesShop" >
+
+        </activity>
     </application>
 
 </manifest>

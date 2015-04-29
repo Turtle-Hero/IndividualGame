@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,10 +23,12 @@ public class UpgradesShop extends ActionBarActivity {
     Boolean clickPower = false;
     ActionBar actionbar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("test2", "test2");
         super.onCreate(savedInstanceState);
+        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        editor = prefs.edit();
         setContentView(R.layout.activity_upgrades_menu);
 
         actionbar = getSupportActionBar();
@@ -36,13 +40,9 @@ public class UpgradesShop extends ActionBarActivity {
         clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
         clickPowerButton.setOnClickListener(clickPowerListner);
 
-        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
-        editor = prefs.edit();
-
     }
 
     View.OnClickListener menuListener = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             finish();
@@ -63,6 +63,12 @@ public class UpgradesShop extends ActionBarActivity {
         editor.commit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_leader_board, menu);
+        return true;
+    }
 
 
 }
