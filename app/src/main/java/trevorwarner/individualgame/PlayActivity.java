@@ -34,14 +34,9 @@ brick rubble.
 public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
 
-    private Upgrades upgrades;
+    private Brick brickObject;
     private BrickBit brickBits;
-    private int brickTapCount;
-    private double brickHealth;
-    private int prevRoundHealth;
-    private int totalBrickHealth;
-    private int twoThirdsHealth;
-    private int oneThirdHealth;
+    private Upgrades upgrades;
     private int score;
     private TextView brickView;
     private TextView scoreKeeper;
@@ -50,21 +45,17 @@ public class PlayActivity extends ActionBarActivity {
     private String timeSec;
     private String timeMilli;
     private ImageButton brickButton;
+    private int soundID;
+    private long millis;
+    private boolean endRoundState = false;
+    private Handler myHandler = new Handler();
+    private SoundPool buttonHitSound;
+    private Timer cdTimer;
+    private ActionBar actionbar;
     private SharedPreferences prefs;
-    int soundID;
-    long millis;
-    boolean endRoundState = false;
-    Handler myHandler = new Handler();
-    SoundPool buttonHitSound;
-    Timer cdTimer;
-    ActionBar actionbar;
-    int roundCount = 0;
+    private SharedPreferences.Editor editor;
 
-    double clickPower = 1;
-
-    //stuff grace added
-    double swipePower = 1;
-
+    private int roundCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +67,9 @@ public class PlayActivity extends ActionBarActivity {
 
         prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
 
+
+        editor=prefs.edit();
+        editor.clear();
         //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
@@ -94,7 +88,7 @@ public class PlayActivity extends ActionBarActivity {
         //initializes countdown timer
         cdTimer = new Timer(10000, 10);
 
-        upgrades = new Upgrades(clickPower);
+        upgrades = new Upgrades();
         brickBits = BrickBit.getMainBrickBitBank(prefs);
 
         checkUpgrades();
@@ -105,14 +99,13 @@ public class PlayActivity extends ActionBarActivity {
     //starts every round. Updates round #, creates new brick image, updates brick health
     public void newRound() {
         endRoundState = false;
-        newBrick();
-        brickTapCount = 0;
         brickView.setText("" + 0);
         //updates and sets to textview Round count
         roundCount++;
         roundKeeper.setText("" + roundCount);
-        //sets brick health benchmarks
-        setHealthMarks();
+        //create and show the new brick
+        brickObject=new Brick(roundCount, brickButton);
+        showBrick();
         //Shows startTime for Round
         timeKeeper.setText("10.0");
         //starts timer when Start dialog button is clicked
@@ -191,14 +184,14 @@ public class PlayActivity extends ActionBarActivity {
                     Log.d(TAG, "click");
                     buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
-                        brickTapSetter(false);
+                        brickTapSetter();
                         updateBrickHealth(false);
                     }
                 } else if (((Math.abs(startX - endX) > 5) && (Math.abs(startY - endY) > 5))) {
                     Log.d(TAG, "swipe");
                     buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
-                        brickTapSetter(true);
+                        brickTapSetter();
                         updateBrickHealth(true);
                     }
                 }
@@ -208,62 +201,45 @@ public class PlayActivity extends ActionBarActivity {
     };
 
     //display the # of taps
-    public void brickTapSetter(boolean swipeOccured) {
-
-        if (brickHealth > 0) {
-            if(swipeOccured){
-                brickTapCount = (int) (brickTapCount + swipePower);
-                brickView.setText("" +brickTapCount);
-            } else {
-
-                brickTapCount = (int) (brickTapCount + clickPower);
-                brickView.setText("" + brickTapCount);
-            }
-        }
+    public void brickTapSetter() {
+        brickView.setText("" + brickObject.getBrickHits());
     }
 
     //updates the health values for brick and brick image
-    public void updateBrickHealth(boolean swipeOccured) {
+    public void updateBrickHealth(boolean swipeOccurred) {
 
         //grace put in the if/else statement
-        if(upgrades.swipingIsEnabled() && swipeOccured){
+        if(upgrades.swipingIsEnabled() && swipeOccurred){
             Log.d(TAG, "swipe counted ");
-            brickHealth = brickHealth - swipePower;
+            brickObject.setBrickHealth(upgrades.getSwipePower());
         }else{
             Log.d(TAG, "click counted");
-            brickHealth = brickHealth - clickPower;
+            brickObject.setBrickHealth(upgrades.getClickPower());
         }
 
-        //brickHealth--;
-        if ( (brickHealth <= twoThirdsHealth) && (brickHealth > oneThirdHealth) ){
-            brickButton.setImageResource(R.drawable.cracked_brick);
-        } else if ( brickHealth <= oneThirdHealth && brickHealth > 0){
-            brickButton.setImageResource(R.drawable.broken_brick);
-        } else if (brickHealth <= 0){
-            cdTimer.cancel();
-            brickButton.setImageResource(R.drawable.pile_rocks);
+        if(brickObject.getCurrentBrickHealth()<=0){
             endRound();
         }
     }
 
     //creates new brick image
-    public void newBrick() {
-        brickButton.setImageResource(R.drawable.brick);
+    public void showBrick() {
+        brickObject.getBrickButton();
     }
 
-    //sets brick health each round
-    public void setHealthMarks() {
-        if (roundCount == 1){
-            totalBrickHealth = 3;
-        }else {
-            totalBrickHealth = prevRoundHealth + (roundCount + (roundCount - 1));
-        }
-        prevRoundHealth = totalBrickHealth;
-        brickHealth = totalBrickHealth;
-        twoThirdsHealth = (totalBrickHealth / 3) * 2;
-        oneThirdHealth = (totalBrickHealth / 3);
-
-    }
+//    //sets brick health each round
+//    public void setHealthMarks() {
+//        if (roundCount == 1){
+//            totalBrickHealth = 3;
+//        }else {
+//            totalBrickHealth = prevRoundHealth + (roundCount + (roundCount - 1));
+//        }
+//        prevRoundHealth = totalBrickHealth;
+//        brickHealth = totalBrickHealth;
+//        twoThirdsHealth = (totalBrickHealth / 3) * 2;
+//        oneThirdHealth = (totalBrickHealth / 3);
+//
+//    }
 
     public void updateScore() {
         score = (score + 1) + (int) (millis / 1000);
@@ -275,9 +251,10 @@ public class PlayActivity extends ActionBarActivity {
     //resets variables and textviews, then initializes new round.
     public void endRound () {
        endRoundState = true;
+       cdTimer.cancel();
        updateScore();
-       totalBrickHealth = totalBrickHealth + (1 + totalBrickHealth / 2);
-       brickHealth = totalBrickHealth;
+//       totalBrickHealth = totalBrickHealth + (1 + totalBrickHealth / 2);
+//       brickHealth = totalBrickHealth;
        //newRound();
         myHandler.postDelayed(new Runnable() {
             @Override
@@ -383,14 +360,14 @@ public class PlayActivity extends ActionBarActivity {
     }
 
     public void checkUpgrades() {
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
         Boolean clickPowerBoolean = prefs.getBoolean("clickPowerBoolean", false);
         Boolean swipePowerBoolean = prefs.getBoolean("swipePowerBoolean", false);
         if (clickPowerBoolean){
-            clickPower = upgrades.clickPower(clickPower);
+            upgrades.setClickPower();
         }
        if (swipePowerBoolean){
-            swipePower = upgrades.swipe(swipePower);
+            upgrades.setSwipePower();
         }
 
     }
