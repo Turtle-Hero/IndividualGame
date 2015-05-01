@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 /**
  * Created by the_guz on 4/24/15.
@@ -22,6 +21,9 @@ public class UpgradesShop extends ActionBarActivity {
     ImageButton clickPowerButton;
     Boolean clickPower = false;
     ActionBar actionbar;
+
+    ImageButton swipeUpgradeButton;
+    boolean swipeUpgradeEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,10 @@ public class UpgradesShop extends ActionBarActivity {
         clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
         clickPowerButton.setOnClickListener(clickPowerListner);
 
+        swipeUpgradeButton = (ImageButton) findViewById(R.id.swipeUpgrade);
+        swipeUpgradeButton.setOnClickListener(swipeUpgradeListener);
+
+
     }
 
     View.OnClickListener menuListener = new View.OnClickListener() {
@@ -57,9 +63,18 @@ public class UpgradesShop extends ActionBarActivity {
         }
     };
 
+    View.OnClickListener swipeUpgradeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            swipeUpgradeEnabled = true;
+            saveChanges();
+        }
+    };
+
     public void saveChanges() {
         //commits changes to shared preferences
         editor.putBoolean("clickPowerBoolean", clickPower);
+        editor.putBoolean("swipePowerBoolean", swipeUpgradeEnabled);
         editor.commit();
     }
 

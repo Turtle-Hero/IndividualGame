@@ -15,11 +15,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 
 /*
@@ -60,6 +62,9 @@ public class PlayActivity extends ActionBarActivity {
 
     double clickPower = 1;
 
+    //stuff grace added
+    double swipePower = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +86,15 @@ public class PlayActivity extends ActionBarActivity {
         //initialize brick hit noise
         buttonHitSound = new SoundPool(15, AudioManager.STREAM_MUSIC,1);
         soundID = buttonHitSound.load(this, R.raw.hit_sound, 1);
-        brickButton.setOnClickListener(brickListener);
+//        brickButton.setOnClickListener(brickListener);
+
+        //Grace added:
+        brickButton.setOnTouchListener(brickSwipeListener);
+
         //initializes countdown timer
         cdTimer = new Timer(10000, 10);
 
-        upgrades = new Upgrades();
+        upgrades = new Upgrades(clickPower);
         brickBits = BrickBit.getMainBrickBitBank(prefs);
 
         checkUpgrades();
@@ -146,28 +155,85 @@ public class PlayActivity extends ActionBarActivity {
     }
 
     //on a brick hit, play brick hit sound, update tap amount and update brick health
-    View.OnClickListener brickListener = new View.OnClickListener() {
+//    View.OnClickListener brickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Log.d(TAG, " onClick called.");
+//
+//           buttonHitSound.play(soundID,1,1,1,0,1);
+//           if (!endRoundState) {
+//               brickTapSetter(false);
+//               updateBrickHealth(false);
+//           }
+//        }
+//    };
+
+    //Grace added brickSwipeListener and got rid of the onClickListener
+    //When a brick is swiped, update tap amount and update brick health
+    View.OnTouchListener brickSwipeListener = new View.OnTouchListener(){
+        int startX = 0;
+        int startY = 0;
+
         @Override
-        public void onClick(View v) {
-           buttonHitSound.play(soundID,1,1,1,0,1);
-           if (!endRoundState) {
-               brickTapSetter();
-               updateBrickHealth();
-           }
+        public boolean onTouch(View v, MotionEvent event) {
+            int actionTaken = event.getAction();
+
+            if(actionTaken == MotionEvent.ACTION_DOWN){
+
+                startX = (int) event.getX();
+                startY = (int) event.getY();
+
+            } else if (actionTaken == MotionEvent.ACTION_UP) {
+                int endX = (int) event.getX();
+                int endY = (int) event.getY();
+
+                if(((Math.abs(startX - endX) <= 5) && (Math.abs(startY - endY) <=5))) {
+                    Log.d(TAG, "click");
+                    buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                    if (!endRoundState) {
+                        brickTapSetter(false);
+                        updateBrickHealth(false);
+                    }
+                } else if (((Math.abs(startX - endX) > 5) && (Math.abs(startY - endY) > 5))) {
+                    Log.d(TAG, "swipe");
+                    buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                    if (!endRoundState) {
+                        brickTapSetter(true);
+                        updateBrickHealth(true);
+                    }
+                }
+            }
+            return false;
         }
     };
 
     //display the # of taps
-    public void brickTapSetter() {
+    public void brickTapSetter(boolean swipeOccured) {
+
         if (brickHealth > 0) {
-            brickTapCount++;
-            brickView.setText(""+brickTapCount);
+            if(swipeOccured){
+                brickTapCount = (int) (brickTapCount + swipePower);
+                brickView.setText("" +brickTapCount);
+            } else {
+
+                brickTapCount = (int) (brickTapCount + clickPower);
+                brickView.setText("" + brickTapCount);
+            }
         }
     }
 
     //updates the health values for brick and brick image
-    public void updateBrickHealth() {
-        brickHealth = brickHealth - clickPower;
+    public void updateBrickHealth(boolean swipeOccured) {
+
+        //grace put in the if/else statement
+        if(upgrades.swipingIsEnabled() && swipeOccured){
+            Log.d(TAG, "swipe counted ");
+            brickHealth = brickHealth - swipePower;
+        }else{
+            Log.d(TAG, "click counted");
+            brickHealth = brickHealth - clickPower;
+        }
+
         //brickHealth--;
         if ( (brickHealth <= twoThirdsHealth) && (brickHealth > oneThirdHealth) ){
             brickButton.setImageResource(R.drawable.cracked_brick);
@@ -319,8 +385,12 @@ public class PlayActivity extends ActionBarActivity {
     public void checkUpgrades() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
         Boolean clickPowerBoolean = prefs.getBoolean("clickPowerBoolean", false);
-        if (clickPowerBoolean == true){
+        Boolean swipePowerBoolean = prefs.getBoolean("swipePowerBoolean", false);
+        if (clickPowerBoolean){
             clickPower = upgrades.clickPower(clickPower);
+        }
+       if (swipePowerBoolean){
+            swipePower = upgrades.swipe(swipePower);
         }
 
     }
