@@ -29,7 +29,7 @@ public class UpgradesShop extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("test2", "test2");
         super.onCreate(savedInstanceState);
-        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
         editor = prefs.edit();
         setContentView(R.layout.activity_upgrades_menu);
 
@@ -40,7 +40,7 @@ public class UpgradesShop extends ActionBarActivity {
         menuButton.setOnClickListener(menuListener);
 
         clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
-        clickPowerButton.setOnClickListener(clickPowerListner);
+        clickPowerButton.setOnClickListener(clickPowerListener);
 
         swipeUpgradeButton = (ImageButton) findViewById(R.id.swipeUpgrade);
         swipeUpgradeButton.setOnClickListener(swipeUpgradeListener);
@@ -55,7 +55,7 @@ public class UpgradesShop extends ActionBarActivity {
         }
     };
 
-    View.OnClickListener clickPowerListner = new View.OnClickListener(){
+    View.OnClickListener clickPowerListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             clickPower = true;

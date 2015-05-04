@@ -52,8 +52,12 @@ public class PlayActivity extends ActionBarActivity {
     private SoundPool buttonHitSound;
     private Timer cdTimer;
     private ActionBar actionbar;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences brickBitPref;
+    private SharedPreferences leaderBoardPref;
+    private SharedPreferences upgradePref;
+    private SharedPreferences.Editor brickBitEditor;
+    private SharedPreferences.Editor leaderBoardEditor;
+    private SharedPreferences.Editor upgradeEditor;
 
     private int roundCount = 0;
 
@@ -65,11 +69,14 @@ public class PlayActivity extends ActionBarActivity {
         actionbar = getSupportActionBar();
         actionbar.hide();
 
-        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        brickBitPref = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+        leaderBoardPref = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
+        upgradePref = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
 
+        brickBitEditor = brickBitPref.edit();
+        leaderBoardEditor = leaderBoardPref.edit();
+        upgradeEditor = upgradePref.edit();
 
-        editor=prefs.edit();
-        editor.clear();
         //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
@@ -89,7 +96,7 @@ public class PlayActivity extends ActionBarActivity {
         cdTimer = new Timer(10000, 10);
 
         upgrades = new Upgrades();
-        brickBits = BrickBit.getMainBrickBitBank(prefs);
+        brickBits = BrickBit.getMainBrickBitBank(brickBitPref);
 
         checkUpgrades();
         newRound();
@@ -184,15 +191,15 @@ public class PlayActivity extends ActionBarActivity {
                     Log.d(TAG, "click");
                     buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
-                        brickTapSetter();
                         updateBrickHealth(false);
+                        brickTapSetter();
                     }
                 } else if (((Math.abs(startX - endX) > 5) && (Math.abs(startY - endY) > 5))) {
                     Log.d(TAG, "swipe");
                     buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
-                        brickTapSetter();
                         updateBrickHealth(true);
+                        brickTapSetter();
                     }
                 }
             }
@@ -267,7 +274,6 @@ public class PlayActivity extends ActionBarActivity {
     //stores score in shared preference for leaderboard
     //starts alert for Main Menu + leaderboard navigation
     public void endGame() {
-        SharedPreferences.Editor editor = prefs.edit();
 
         brickBits.increaseBrickBits(score);
 
@@ -275,8 +281,8 @@ public class PlayActivity extends ActionBarActivity {
         toast.show();
 
 
-        editor.putInt("SavedScore", score);
-        editor.commit();
+        leaderBoardEditor.putInt("SavedScore", score);
+        leaderBoardEditor.commit();
         final Intent intent = new Intent(PlayActivity.this, LeaderBoard.class);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("You Lost!");
@@ -360,9 +366,8 @@ public class PlayActivity extends ActionBarActivity {
     }
 
     public void checkUpgrades() {
-        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
-        Boolean clickPowerBoolean = prefs.getBoolean("clickPowerBoolean", false);
-        Boolean swipePowerBoolean = prefs.getBoolean("swipePowerBoolean", false);
+        Boolean clickPowerBoolean = upgradePref.getBoolean("clickPowerBoolean", false);
+        Boolean swipePowerBoolean = upgradePref.getBoolean("swipePowerBoolean", false);
         if (clickPowerBoolean){
             upgrades.setClickPower();
         }

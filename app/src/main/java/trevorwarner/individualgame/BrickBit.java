@@ -1,6 +1,7 @@
 package trevorwarner.individualgame;
 
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import java.util.Map;
 import java.util.Set;
@@ -33,8 +34,12 @@ public class BrickBit {
         setBrickBits(getBrickBits() + amountToIncrease);
     }
 
-    public void decreaseBrickBits(int amountToDecrease) {
-        setBrickBits(getBrickBits() - amountToDecrease);
+    public void decreaseBrickBits(int amountToDecrease) throws InsufficientBrickBitsException {
+        if(getBrickBits() - amountToDecrease < 0) {
+            throw new InsufficientBrickBitsException();
+        } else {
+            setBrickBits(getBrickBits() - amountToDecrease);
+        }
     }
 
     public void resetBrickBits() { setBrickBits(0);}
@@ -43,5 +48,9 @@ public class BrickBit {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("BrickBitTotal", newValue);
         editor.commit();
+    }
+
+    private class InsufficientBrickBitsException extends Exception {
+
     }
 }
