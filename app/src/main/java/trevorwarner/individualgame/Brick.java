@@ -21,14 +21,13 @@ public class Brick {
     }
 
     public void setBrickHealth(int clickPower){
-        currentBrickHealth-=clickPower;
         if(clickPower>currentBrickHealth) {
             brickHits += currentBrickHealth;
+            currentBrickHealth-=clickPower;
         }else{
             brickHits+=clickPower;
+            currentBrickHealth-=clickPower;
         }
-        //If power less than remaining health?
-        brickHits++;
         setBrickButton();
     }
 

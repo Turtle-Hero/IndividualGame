@@ -38,7 +38,7 @@ public class LeaderBoard extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = getApplicationContext().getSharedPreferences("LeaderBoardSaves", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
         editor = prefs.edit();
         setContentView(R.layout.activity_leader_board);
 
