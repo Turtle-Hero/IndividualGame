@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,30 +7,38 @@
     android:background="#ffffc948"
     tools:context="trevorwarner.individualgame.UpgradesShop">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upgrades"
-        android:id="@+id/upgrades_title_textview"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="10dp"
-        android:textSize="35dp" />
-
     <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="450dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:columnCount="5"
-        android:rowCount="3"
+        android:rowCount="5"
         android:padding="2dp"
-        android:useDefaultMargins="true">
+        android:useDefaultMargins="true"
+        android:layout_gravity="center"
+        android:columnOrderPreserved="true"
+        android:rowOrderPreserved="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/upgradeTitle"
+            android:id="@+id/textView4"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textSize="25dp" />
 
         <ImageButton
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/clickUpgrade"
-            android:src="@android:drawable/ic_menu_compass"
-            android:layout_gravity="center_horizontal|top"
-            android:paddingTop="2dp" />
+            android:src="@drawable/pointer"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_row="1"
+            android:layout_column="0" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,59 +46,115 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/textView"
             android:layout_column="0"
-            android:layout_row="0"
-            android:layout_gravity="center_horizontal|bottom"
-            android:text="Click Power-Up" />
+            android:layout_row="2"
+            android:layout_gravity="center_horizontal|top"
+            android:text="+Click Power" />
 
         <ImageButton
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/swipeUpgrade"
-            android:layout_gravity="center_horizontal|top"
-            android:paddingTop="2dp" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:src="@drawable/swipe"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_row="1"
+            android:layout_column="1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Swipe Upgrade"
+            android:text="Slash Attack"
             android:id="@+id/textView2"
-            android:layout_row="0"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="2"
+            android:layout_gravity="center_horizontal|top"
             android:layout_column="1" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:id="@+id/bombButton"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:src="@android:drawable/btn_radio"
-            android:layout_gravity="top" />
+            android:layout_row="1"
+            android:layout_column="3"
+            android:src="@drawable/bomb"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal|bottom" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Bomb Upgrade"
+            android:text="Bomb!"
             android:id="@+id/textView3"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_gravity="bottom" />
+            android:layout_row="2"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal|top" />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/timerButton"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:src="@drawable/timer"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal" />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/imageButton"
+            android:layout_row="3"
+            android:layout_column="3"
+            android:src="@drawable/moneybag"
+            android:background="@null"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/timeUpgrade"
+            android:id="@+id/textView5"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|top" />
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/nukeButton"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:src="@drawable/nuke"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal|bottom" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/nukeUpgrade"
+            android:id="@+id/textView6"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/moneyUpgrade"
+            android:id="@+id/textView7"
+            android:layout_row="4"
+            android:layout_column="3"
+            android:layout_gravity="center_horizontal" />
 
     </GridLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="2dp">
-
-        <Button
-            android:layout_width="175dp"
-            android:layout_height="50dp"
-            android:text="Menu"
-            android:id="@+id/menuButton"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

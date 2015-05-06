@@ -14,4 +14,9 @@
     <string name="menuString">Menu</string>
     <string name="fourth">4th: </string>
     <string name="fifth">5th: </string>
+    <string name="upgradeTitle">Upgrades</string>
+    <string name="clickUpgrade">+Click Power</string>
+    <string name="timeUpgrade">+Time</string>
+    <string name="nukeUpgrade">Nuke</string>
+    <string name="moneyUpgrade">Money</string>
 </resources>
