@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,8 +77,17 @@ public class MainMenu extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_reset_brick_bits) {
+            SharedPreferences upgrades = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+            SharedPreferences.Editor brickBitEditor = upgrades.edit();
+            brickBitEditor.clear();
+            brickBitEditor.apply();
+        }
+        if (id == R.id.action_reset_upgrades) {
+            SharedPreferences upgrades = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
+            SharedPreferences.Editor upgradeEditor = upgrades.edit();
+            upgradeEditor.clear();
+            upgradeEditor.apply();
         }
 
         return super.onOptionsItemSelected(item);

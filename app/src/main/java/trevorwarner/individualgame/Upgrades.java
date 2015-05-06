@@ -18,13 +18,13 @@ public class Upgrades {
     //Each upgrade then changes the newPower
     public Upgrades (){
         clickPower = 1;
-        swipePower= 3;
+        swipePower= 0;
         swipingEnabled = false;
     }
 
     public int setClickPower (){
         //double newPower = oldPower + (oldPower * .1););
-        clickPower= clickPower * 2;
+        clickPower++;
         return clickPower;
     }
 

@@ -14,6 +14,8 @@
     <string name="menuString">Menu</string>
     <string name="fourth">4th: </string>
     <string name="fifth">5th: </string>
+    <string name="action_reset_brick_bits">Reset BrickBits</string>
+    <string name="action_reset_upgrades">Reset Upgrades</string>
     <string name="upgradeTitle">Upgrades</string>
     <string name="clickUpgrade">+Click Power</string>
     <string name="timeUpgrade">+Time</string>
