@@ -1,21 +1,20 @@
 package trevorwarner.individualgame;
 
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.MotionEvent;
 
 /**
  * Created by the_guz on 4/19/15.
  * Class that will house all the methods that are called
  * when an upgrade is bought/from save state.
  */
+
 public class Upgrades {
 
     private int clickPower;
     private int swipePower;
     private boolean swipingEnabled;
     SharedPreferences.Editor editor;
-    SharedPreferences prefs;
+
 
     //constructor initially sets the newPower to the old Power. (meaning the user has no upgrades)
     //Each upgrade then changes the newPower
@@ -25,9 +24,11 @@ public class Upgrades {
         swipingEnabled = false;
     }
 
-    public int setClickPower (){
+    public int setClickPower (SharedPreferences upgradePrefs){
         //double newPower = oldPower + (oldPower * .1););
-        clickPower++;
+        if (upgradePrefs.getInt("clickPowerCount", 0) > 0){
+            clickPower++;
+        }
         return clickPower;
     }
 

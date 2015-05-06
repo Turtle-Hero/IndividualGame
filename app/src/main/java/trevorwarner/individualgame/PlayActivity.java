@@ -371,9 +371,7 @@ public class PlayActivity extends ActionBarActivity {
         Boolean bombBoolean = upgradePref.getBoolean("bombBoolean", false);
         Boolean nukeBoolean = upgradePref.getBoolean("nukeBoolean", false);
         int currencyCount = upgradePref.getInt("currencyInt",0);
-        if (clickPowerBoolean){
-            upgrades.setClickPower();
-        }
+        upgrades.setClickPower(upgradePref);
         if (swipePowerBoolean){
             upgrades.setSwipePower();
         }
