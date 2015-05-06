@@ -10,18 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * Created by the_guz on 4/24/15.
  */
 public class UpgradesShop extends ActionBarActivity {
 
-    Button menuButton;
-    SharedPreferences.Editor editor;
-    SharedPreferences prefs;
-    ImageButton clickPowerButton;
-    int clickPowerCount = 0;
-    ActionBar actionbar;
+    boolean clickPower = false;
+    boolean swipeUpgradeEnabled = false;
+    BrickBitBank brickBitsBank;
+    ImageButton swipeUpgradeButton;
 
     ImageButton bombButton;
     int bombCount = 0;
@@ -29,21 +28,22 @@ public class UpgradesShop extends ActionBarActivity {
     ImageButton nukeButton;
     int nukeCount = 0;
 
-    ImageButton swipeUpgradeButton;
-    boolean swipeUpgradeEnabled = false;
+    int clickPowerCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("test2", "test2");
         super.onCreate(savedInstanceState);
-        prefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
-        editor = prefs.edit();
+
+        SharedPreferences brickBitPrefs = getApplication().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+        brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPrefs);
+
         setContentView(R.layout.activity_upgrades_menu);
 
-        actionbar = getSupportActionBar();
+        ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
 
-        clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
+        ImageButton clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
         clickPowerButton.setOnClickListener(clickPowerListener);
 
         swipeUpgradeButton = (ImageButton) findViewById(R.id.swipeUpgrade);
@@ -52,9 +52,13 @@ public class UpgradesShop extends ActionBarActivity {
         bombButton = (ImageButton) findViewById(R.id.bombButton);
         bombButton.setOnClickListener(bombButtonListener);
 
+        TextView brickBitView = (TextView) findViewById(R.id.brickBitView);
+        brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
+
         nukeButton = (ImageButton) findViewById(R.id.nukeButton);
         nukeButton.setOnClickListener(nukeButtonListener);
 
+    
     }
 
     View.OnClickListener clickPowerListener = new View.OnClickListener(){
@@ -93,6 +97,8 @@ public class UpgradesShop extends ActionBarActivity {
 
     public void saveChanges() {
         //commits changes to shared preferences
+        SharedPreferences upgradePrefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = upgradePrefs.edit();
         editor.putInt("clickPowerCount", clickPowerCount);
         editor.putBoolean("swipePowerBoolean", swipeUpgradeEnabled);
         editor.putInt("bombCount", bombCount);
