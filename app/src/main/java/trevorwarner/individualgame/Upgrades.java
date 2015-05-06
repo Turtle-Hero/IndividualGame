@@ -1,5 +1,6 @@
 package trevorwarner.individualgame;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -10,9 +11,11 @@ import android.view.MotionEvent;
  */
 public class Upgrades {
 
-   private int clickPower;
-   private int swipePower;
-   private boolean swipingEnabled;
+    private int clickPower;
+    private int swipePower;
+    private boolean swipingEnabled;
+    SharedPreferences.Editor editor;
+    SharedPreferences prefs;
 
     //constructor initially sets the newPower to the old Power. (meaning the user has no upgrades)
     //Each upgrade then changes the newPower
