@@ -368,12 +368,24 @@ public class PlayActivity extends ActionBarActivity {
     public void checkUpgrades() {
         Boolean clickPowerBoolean = upgradePref.getBoolean("clickPowerBoolean", false);
         Boolean swipePowerBoolean = upgradePref.getBoolean("swipePowerBoolean", false);
+        Boolean bombBoolean = upgradePref.getBoolean("bombBoolean", false);
+        Boolean nukeBoolean = upgradePref.getBoolean("nukeBoolean", false);
+        int currencyCount = upgradePref.getInt("currencyInt",0);
         if (clickPowerBoolean){
             upgrades.setClickPower();
         }
-       if (swipePowerBoolean){
+        if (swipePowerBoolean){
             upgrades.setSwipePower();
         }
+        if (bombBoolean) {
+            int newHealth = upgrades.bombUpgrade(brickObject.getCurrentBrickHealth());
+            brickObject.setBrickHealth(newHealth);
+        }
+        if (nukeBoolean) {
+            brickObject.setBrickHealth(0);
+        }
+
+
 
     }
 

@@ -20,8 +20,14 @@ public class UpgradesShop extends ActionBarActivity {
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     ImageButton clickPowerButton;
-    Boolean clickPower = false;
+    int clickPowerCount = 0;
     ActionBar actionbar;
+
+    ImageButton bombButton;
+    int bombCount = 0;
+
+    ImageButton nukeButton;
+    int nukeCount = 0;
 
     ImageButton swipeUpgradeButton;
     boolean swipeUpgradeEnabled = false;
@@ -37,29 +43,24 @@ public class UpgradesShop extends ActionBarActivity {
         actionbar = getSupportActionBar();
         actionbar.hide();
 
-        menuButton = (Button) findViewById(R.id.menuButton);
-        menuButton.setOnClickListener(menuListener);
-
         clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
         clickPowerButton.setOnClickListener(clickPowerListener);
 
         swipeUpgradeButton = (ImageButton) findViewById(R.id.swipeUpgrade);
         swipeUpgradeButton.setOnClickListener(swipeUpgradeListener);
 
+        bombButton = (ImageButton) findViewById(R.id.bombButton);
+        bombButton.setOnClickListener(bombButtonListener);
+
+        nukeButton = (ImageButton) findViewById(R.id.nukeButton);
+        nukeButton.setOnClickListener(nukeButtonListener);
 
     }
-
-    View.OnClickListener menuListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
 
     View.OnClickListener clickPowerListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            clickPower = true;
+            clickPowerCount++;
             saveChanges();
         }
     };
@@ -72,10 +73,30 @@ public class UpgradesShop extends ActionBarActivity {
         }
     };
 
+    View.OnClickListener bombButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            bombCount++;
+            saveChanges();
+        }
+    };
+
+    View.OnClickListener nukeButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            nukeCount++;
+            saveChanges();
+        }
+    };
+
+
+
     public void saveChanges() {
         //commits changes to shared preferences
-        editor.putBoolean("clickPowerBoolean", clickPower);
+        editor.putInt("clickPowerCount", clickPowerCount);
         editor.putBoolean("swipePowerBoolean", swipeUpgradeEnabled);
+        editor.putInt("bombCount", bombCount);
+        editor.putInt("nukeCount", nukeCount);
         editor.commit();
     }
 

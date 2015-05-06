@@ -34,6 +34,15 @@ public class Upgrades {
         swipePower = swipePower+3;
     }
 
+    public int bombUpgrade(int currentHealth) {
+        int newHealth = currentHealth - (currentHealth * (1/3));
+        return newHealth;
+    }
+
+    public int instantClear() {
+        return 0;
+    }
+
     public int getClickPower(){return clickPower;}
 
     public int getSwipePower(){return swipePower;}
