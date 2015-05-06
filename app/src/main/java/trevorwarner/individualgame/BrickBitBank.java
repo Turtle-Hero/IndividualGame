@@ -1,28 +1,24 @@
 package trevorwarner.individualgame;
 
 import android.content.SharedPreferences;
-import android.widget.Toast;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * BrickBitBank
  */
-public class BrickBit {
+public class BrickBitBank {
 
-    private static BrickBit mainBank = null;
+    private static BrickBitBank mainBank = null;
 
-    public static BrickBit getMainBrickBitBank(SharedPreferences prefs) {
+    public static BrickBitBank getMainBrickBitBank(SharedPreferences prefs) {
         if (mainBank == null) {
-            mainBank = new BrickBit(prefs);
+            mainBank = new BrickBitBank(prefs);
         }
         return mainBank;
     }
 
     private SharedPreferences sharedPref;
 
-    private BrickBit(SharedPreferences prefs) {
+    private BrickBitBank(SharedPreferences prefs) {
         this.sharedPref = prefs;
     }
 

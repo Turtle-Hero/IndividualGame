@@ -35,7 +35,7 @@ public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
 
     private Brick brickObject;
-    private BrickBit brickBits;
+    private BrickBitBank brickBitsBank;
     private Upgrades upgrades;
     private int score;
     private TextView brickView;
@@ -96,7 +96,7 @@ public class PlayActivity extends ActionBarActivity {
         cdTimer = new Timer(10000, 10);
 
         upgrades = new Upgrades();
-        brickBits = BrickBit.getMainBrickBitBank(brickBitPref);
+        brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPref);
 
         checkUpgrades();
         newRound();
@@ -275,9 +275,9 @@ public class PlayActivity extends ActionBarActivity {
     //starts alert for Main Menu + leaderboard navigation
     public void endGame() {
 
-        brickBits.increaseBrickBits(score);
+        brickBitsBank.increaseBrickBits(score);
 
-        Toast toast = Toast.makeText(getApplicationContext(), "BrickBits = " + brickBits.getBrickBits(), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "BrickBits = " + brickBitsBank.getBrickBits(), Toast.LENGTH_SHORT);
         toast.show();
 
 
