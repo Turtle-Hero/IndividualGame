@@ -46,7 +46,7 @@ public class BrickBitBank {
         editor.commit();
     }
 
-    private class InsufficientBrickBitsException extends Exception {
+    public class InsufficientBrickBitsException extends Exception {
 
     }
 }

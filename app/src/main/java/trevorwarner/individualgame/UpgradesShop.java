@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by the_guz on 4/24/15.
@@ -21,6 +22,7 @@ public class UpgradesShop extends ActionBarActivity {
     boolean swipeUpgradeEnabled = false;
     BrickBitBank brickBitsBank;
     ImageButton swipeUpgradeButton;
+    TextView brickBitView;
 
     ImageButton bombButton;
     int bombCount = 0;
@@ -52,7 +54,7 @@ public class UpgradesShop extends ActionBarActivity {
         bombButton = (ImageButton) findViewById(R.id.bombButton);
         bombButton.setOnClickListener(bombButtonListener);
 
-        TextView brickBitView = (TextView) findViewById(R.id.brickBitView);
+        brickBitView = (TextView) findViewById(R.id.brickBitView);
         brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
 
         nukeButton = (ImageButton) findViewById(R.id.nukeButton);
@@ -64,32 +66,60 @@ public class UpgradesShop extends ActionBarActivity {
     View.OnClickListener clickPowerListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            clickPowerCount++;
-            saveChanges();
+            try {
+                brickBitsBank.decreaseBrickBits(100);
+                clickPowerCount++;
+                saveChanges();
+            } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
         }
     };
 
     View.OnClickListener swipeUpgradeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            swipeUpgradeEnabled = true;
-            saveChanges();
+            try {
+                brickBitsBank.decreaseBrickBits(50);
+                swipeUpgradeEnabled = true;
+                saveChanges();
+            } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
         }
     };
 
     View.OnClickListener bombButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            bombCount++;
-            saveChanges();
+            try {
+                brickBitsBank.decreaseBrickBits(50);
+                bombCount++;
+                saveChanges();
+            } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
         }
     };
 
     View.OnClickListener nukeButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            nukeCount++;
-            saveChanges();
+            try {
+                brickBitsBank.decreaseBrickBits(200);
+                nukeCount++;
+                saveChanges();
+            } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
         }
     };
 
