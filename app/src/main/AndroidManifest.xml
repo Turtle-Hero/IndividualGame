@@ -24,10 +24,12 @@
         </activity>
         <activity
             android:name=".LeaderBoard"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_leader_board" >
         </activity>
         <activity
             android:name="UpgradesShop"
+            android:screenOrientation="portrait"
             android:label="UpgradesShop" >
 
         </activity>

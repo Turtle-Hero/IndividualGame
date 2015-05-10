@@ -66,7 +66,7 @@
                 android:layout_alignBottom="@+id/LButton"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/upgradeIcon"
+                android:src="@drawable/upgradeicon"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 android:layout_weight="1"
