@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="LBpadding">20dp</dimen>
+    <dimen name="upgrade_padding">12dp</dimen>
+    <dimen name="upgrade_text_padding">4dp</dimen>
 </resources>
