@@ -92,7 +92,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(increasePrice(100, clickPowerCount));
+                brickBitsBank.decreaseBrickBits(increasePrice(100, clickPowerCount - 1));
                 clickPowerCount++;
                 Log.d("TEST", "" + clickPowerCount);
                 changedItem = "clickPowerCount";
@@ -211,9 +211,12 @@ public class UpgradesShop extends ActionBarActivity {
     }
 
     public int increasePrice(int oldPrice, int upgradeAmount){
-        int newPrice = oldPrice * (2 * upgradeAmount);
-        Log.d("Test 2", "" + upgradeAmount);
-        return newPrice;
+        if (upgradeAmount == 0){
+            return oldPrice;
+        } else {
+            int newPrice = oldPrice * (2 * upgradeAmount);
+            return newPrice;
+        }
     }
 
 
