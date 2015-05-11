@@ -113,7 +113,8 @@ public class PlayActivity extends ActionBarActivity {
             bombButton = (ImageButton) findViewById(R.id.bombButton);
             bombButton.setVisibility(View.VISIBLE);
             bombButton.setOnClickListener(bombButtonListener);
-        } else if(upgrades.getNukeUpgrade() >= 1){
+        }
+        if(upgrades.getNukeUpgrade() >= 1){
             nukeButton = (ImageButton) findViewById(R.id.nukeButton);
             nukeButton.setVisibility(View.VISIBLE);
             nukeButton.setOnClickListener(nukeButtonListener);
@@ -137,6 +138,7 @@ public class PlayActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
+            brickObject.setBrickHealth(brickObject.getCurrentBrickHealth());
             nukeButton.setVisibility(View.GONE);
             endRound();
         }

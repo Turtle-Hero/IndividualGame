@@ -1,6 +1,8 @@
 package trevorwarner.individualgame;
 
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 /*
 All upgrade Icons were taken from ClipartPanda.com
  */
+    //cash register sound from freesound.org, from user kiddpark
 public class UpgradesShop extends ActionBarActivity {
 
     String changedItem;
@@ -26,7 +29,7 @@ public class UpgradesShop extends ActionBarActivity {
     TextView brickBitView;
 
     ImageButton clickPowerButton;
-    int clickPowerCount = 0;
+    int clickPowerCount = 1;
 
     ImageButton swipeUpgradeButton;
     int swipeCount = 0;
@@ -43,7 +46,8 @@ public class UpgradesShop extends ActionBarActivity {
     ImageButton moneyButton;
     int moneyCount = 0;
 
-
+    private int soundID;
+    private SoundPool buttonHitSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,9 @@ public class UpgradesShop extends ActionBarActivity {
 
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
+
+        buttonHitSound = new SoundPool(8, AudioManager.STREAM_MUSIC,1);
+        soundID = buttonHitSound.load(this, R.raw.cash_register, 2);
 
         brickBitView = (TextView) findViewById(R.id.brickBitView);
         brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
@@ -87,8 +94,10 @@ public class UpgradesShop extends ActionBarActivity {
             try {
                 brickBitsBank.decreaseBrickBits(100);
                 clickPowerCount++;
+                Log.d("TEST", "" + clickPowerCount);
                 changedItem = "clickPowerCount";
                 saveChanges(changedItem, clickPowerCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -105,6 +114,7 @@ public class UpgradesShop extends ActionBarActivity {
                 swipeCount++;
                 changedItem = "swipeCount";
                 saveChanges(changedItem, swipeCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -121,6 +131,7 @@ public class UpgradesShop extends ActionBarActivity {
                 bombCount++;
                 changedItem = "bombCount";
                 saveChanges(changedItem, bombCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -138,6 +149,7 @@ public class UpgradesShop extends ActionBarActivity {
                 timerCount++;
                 changedItem="timerCount";
                 saveChanges(changedItem, timerCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             }catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -154,6 +166,7 @@ public class UpgradesShop extends ActionBarActivity {
                 nukeCount++;
                 changedItem = "nukeCount";
                 saveChanges(changedItem, nukeCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -171,6 +184,7 @@ public class UpgradesShop extends ActionBarActivity {
                 moneyCount++;
                 changedItem="moneyCount";
                 saveChanges(changedItem, moneyCount);
+                buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
             } catch (BrickBitBank.InsufficientBrickBitsException e){
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
