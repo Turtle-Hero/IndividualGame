@@ -92,7 +92,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(100);
+                brickBitsBank.decreaseBrickBits(increasePrice(100, clickPowerCount));
                 clickPowerCount++;
                 Log.d("TEST", "" + clickPowerCount);
                 changedItem = "clickPowerCount";
@@ -110,7 +110,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(100);
+                brickBitsBank.decreaseBrickBits(increasePrice(100, swipeCount));
                 swipeCount++;
                 changedItem = "swipeCount";
                 saveChanges(changedItem, swipeCount);
@@ -127,7 +127,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(75);
+                brickBitsBank.decreaseBrickBits(increasePrice(75, bombCount));
                 bombCount++;
                 changedItem = "bombCount";
                 saveChanges(changedItem, bombCount);
@@ -145,7 +145,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(200);
+                brickBitsBank.decreaseBrickBits(increasePrice(200, timerCount));
                 timerCount++;
                 changedItem="timerCount";
                 saveChanges(changedItem, timerCount);
@@ -162,7 +162,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(250);
+                brickBitsBank.decreaseBrickBits(increasePrice(250, nukeCount));
                 nukeCount++;
                 changedItem = "nukeCount";
                 saveChanges(changedItem, nukeCount);
@@ -180,7 +180,7 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(400);
+                brickBitsBank.decreaseBrickBits(increasePrice(400, moneyCount));
                 moneyCount++;
                 changedItem="moneyCount";
                 saveChanges(changedItem, moneyCount);
@@ -208,6 +208,12 @@ public class UpgradesShop extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_leader_board, menu);
         return true;
+    }
+
+    public int increasePrice(int oldPrice, int upgradeAmount){
+        int newPrice = oldPrice * (2 * upgradeAmount);
+        Log.d("Test 2", "" + upgradeAmount);
+        return newPrice;
     }
 
 
