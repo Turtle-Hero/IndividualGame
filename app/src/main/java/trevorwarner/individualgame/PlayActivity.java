@@ -29,7 +29,7 @@ import android.widget.Toast;
 make the brick and (more) cracked brick images.
 -The rubble pile was also taken from http://www.clipartpanda.com/ and modified by me to look like
 brick rubble.
--The brick hitting noise was taken from http://soundbible.com/tags-karate.html
+-The brick hitting noise was taken from freesound.org/people/nextmaking/sounds/86008/?page=1#, from user nextmaking
  */
 public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";

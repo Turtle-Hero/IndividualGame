@@ -20,7 +20,7 @@ import android.widget.Toast;
 /*
 All upgrade Icons were taken from ClipartPanda.com
  */
-    //cash register sound from freesound.org, from user kiddpark
+    //cash register sound from freesound.org/people/kiddpark/sounds/201159/, from user kiddpark
 public class UpgradesShop extends ActionBarActivity {
 
     String changedItem;
