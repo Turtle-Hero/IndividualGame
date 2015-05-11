@@ -10,48 +10,58 @@ import android.content.SharedPreferences;
 
 public class Upgrades {
 
-    private int clickPower;
+    private int clickCount;
+    private int swipeCount;
     private int swipePower;
-    private boolean swipingEnabled;
-    SharedPreferences.Editor editor;
+    private int nukePower;
+    private int bombPower;
+    private int timerPower;
+    private int moneyCount;
+    private double moneyPower;
 
-
-    //constructor initially sets the newPower to the old Power. (meaning the user has no upgrades)
-    //Each upgrade then changes the newPower
-    public Upgrades (){
-        clickPower = 1;
-        swipePower= 0;
-        swipingEnabled = false;
+    //Upgrade constructor
+    public Upgrades (SharedPreferences prefs){
+        this.clickCount = prefs.getInt("clickPowerCount", 1);
+        this.swipeCount = prefs.getInt("swipeCount", 0);
+        this.swipePower = setSwipePower();
+        this.bombPower = prefs.getInt("bombCount", 0);
+        this.nukePower = prefs.getInt("nukeCount", 0);
+        this.timerPower = prefs.getInt("timerCount", 0);
+        this.moneyCount = prefs.getInt("moneyCount", 0);
+        this.moneyPower =  setMoneyPower();
     }
 
-    public int setClickPower (SharedPreferences upgradePrefs){
-        //double newPower = oldPower + (oldPower * .1););
-        if (upgradePrefs.getInt("clickPowerCount", 0) > 0){
-            clickPower++;
-        }
-        return clickPower;
+    public int bombPower(int currentHealth) {
+        int bombDmg = (currentHealth / 3);
+        return bombDmg;
     }
 
-    // first swipe upgrade. When the user swipes, it does three times as much damage as a tap
-    public void setSwipePower (){
-        swipingEnabled = true;
-        swipePower = swipePower+3;
-    }
+    public int getClickPower(){return clickCount ;}
 
-    public int bombUpgrade(int currentHealth) {
-        int newHealth = currentHealth - (currentHealth * (1/3));
-        return newHealth;
-    }
+    public int getSwipeUpgrade() {return swipeCount;}
 
-    public int instantClear() {
-        return 0;
+    private int setSwipePower(){
+        swipePower = (swipeCount * 2) + 1;
+        return swipePower;
     }
-
-    public int getClickPower(){return clickPower;}
 
     public int getSwipePower(){return swipePower;}
 
-    public boolean swipingIsEnabled() {
-        return swipingEnabled;
+    public int getBombUpgrade(){return bombPower;}
+
+    public int getNukeUpgrade(){return nukePower;}
+
+    public int getTimerPower(){return timerPower;}
+
+    public int getMoneyUpgrade(){return moneyCount;}
+
+    private double setMoneyPower(){
+        moneyPower = (moneyCount * 0.5) + 1;
+        return moneyPower;
     }
+
+    public double getMoneyPower(){return moneyPower;}
+
+
+
 }

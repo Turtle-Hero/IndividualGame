@@ -6,9 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,13 +14,22 @@ import android.widget.Toast;
 /**
  * Created by the_guz on 4/24/15.
  */
+
+/*
+All upgrade Icons were taken from ClipartPanda.com
+ */
 public class UpgradesShop extends ActionBarActivity {
 
-    boolean clickPower = false;
-    boolean swipeUpgradeEnabled = false;
+    String changedItem;
+
     BrickBitBank brickBitsBank;
-    ImageButton swipeUpgradeButton;
     TextView brickBitView;
+
+    ImageButton clickPowerButton;
+    int clickPowerCount = 0;
+
+    ImageButton swipeUpgradeButton;
+    int swipeCount = 0;
 
     ImageButton bombButton;
     int bombCount = 0;
@@ -30,7 +37,13 @@ public class UpgradesShop extends ActionBarActivity {
     ImageButton nukeButton;
     int nukeCount = 0;
 
-    int clickPowerCount = 0;
+    ImageButton timerButton;
+    int timerCount = 0;
+
+    ImageButton moneyButton;
+    int moneyCount = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +58,10 @@ public class UpgradesShop extends ActionBarActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
 
-        ImageButton clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
+        brickBitView = (TextView) findViewById(R.id.brickBitView);
+        brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
+
+        clickPowerButton = (ImageButton) findViewById(R.id.clickUpgrade);
         clickPowerButton.setOnClickListener(clickPowerListener);
 
         swipeUpgradeButton = (ImageButton) findViewById(R.id.swipeUpgrade);
@@ -54,12 +70,14 @@ public class UpgradesShop extends ActionBarActivity {
         bombButton = (ImageButton) findViewById(R.id.bombButton);
         bombButton.setOnClickListener(bombButtonListener);
 
-        brickBitView = (TextView) findViewById(R.id.brickBitView);
-        brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
+        timerButton = (ImageButton) findViewById(R.id.timerButton);
+        timerButton.setOnClickListener(timerButtonListener);
 
         nukeButton = (ImageButton) findViewById(R.id.nukeButton);
         nukeButton.setOnClickListener(nukeButtonListener);
 
+        moneyButton = (ImageButton) findViewById(R.id.moneyButton);
+        moneyButton.setOnClickListener(moneyButtonListener);
     
     }
 
@@ -69,7 +87,8 @@ public class UpgradesShop extends ActionBarActivity {
             try {
                 brickBitsBank.decreaseBrickBits(100);
                 clickPowerCount++;
-                saveChanges();
+                changedItem = "clickPowerCount";
+                saveChanges(changedItem, clickPowerCount);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -82,9 +101,10 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(50);
-                swipeUpgradeEnabled = true;
-                saveChanges();
+                brickBitsBank.decreaseBrickBits(100);
+                swipeCount++;
+                changedItem = "swipeCount";
+                saveChanges(changedItem, swipeCount);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -97,10 +117,28 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(50);
+                brickBitsBank.decreaseBrickBits(75);
                 bombCount++;
-                saveChanges();
+                changedItem = "bombCount";
+                saveChanges(changedItem, bombCount);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
+        }
+    };
+
+    View.OnClickListener timerButtonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            try {
+                brickBitsBank.decreaseBrickBits(200);
+                timerCount++;
+                changedItem="timerCount";
+                saveChanges(changedItem, timerCount);
+            }catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
             }
@@ -112,10 +150,28 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(200);
+                brickBitsBank.decreaseBrickBits(250);
                 nukeCount++;
-                saveChanges();
+                changedItem = "nukeCount";
+                saveChanges(changedItem, nukeCount);
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            brickBitView.setText("Brick Bits: " + brickBitsBank.getBrickBits());
+        }
+    };
+
+    View.OnClickListener moneyButtonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            try {
+                brickBitsBank.decreaseBrickBits(400);
+                moneyCount++;
+                changedItem="moneyCount";
+                saveChanges(changedItem, moneyCount);
+            } catch (BrickBitBank.InsufficientBrickBitsException e){
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
             }
@@ -125,14 +181,11 @@ public class UpgradesShop extends ActionBarActivity {
 
 
 
-    public void saveChanges() {
+    public void saveChanges(String item, int change) {
         //commits changes to shared preferences
         SharedPreferences upgradePrefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
         SharedPreferences.Editor editor = upgradePrefs.edit();
-        editor.putInt("clickPowerCount", clickPowerCount);
-        editor.putBoolean("swipePowerBoolean", swipeUpgradeEnabled);
-        editor.putInt("bombCount", bombCount);
-        editor.putInt("nukeCount", nukeCount);
+        editor.putInt(item, change);
         editor.commit();
     }
 

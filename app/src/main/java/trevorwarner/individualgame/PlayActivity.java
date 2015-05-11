@@ -34,55 +34,56 @@ brick rubble.
 public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
 
+    //objects initialized
     private Brick brickObject;
     private BrickBitBank brickBitsBank;
     private Upgrades upgrades;
+
+    //tracked variables throughout round
     private int score;
+    private boolean endRoundState = false;
+    private int roundCount = 0;
+
+    //xml variables
     private TextView brickView;
     private TextView scoreKeeper;
-    private TextView roundKeeper;
     private TextView timeKeeper;
+    private ImageButton brickButton;
+    private ImageButton bombButton;
+    private ImageButton nukeButton;
+
+    //countdown timer variables
     private String timeSec;
     private String timeMilli;
-    private ImageButton brickButton;
-    private int soundID;
     private long millis;
-    private boolean endRoundState = false;
-    private Handler myHandler = new Handler();
-    private SoundPool buttonHitSound;
     private Timer cdTimer;
-    private ActionBar actionbar;
-    private SharedPreferences brickBitPref;
-    private SharedPreferences leaderBoardPref;
-    private SharedPreferences upgradePref;
-    private SharedPreferences.Editor brickBitEditor;
-    private SharedPreferences.Editor leaderBoardEditor;
-    private SharedPreferences.Editor upgradeEditor;
+    private String totTime;
 
-    private int roundCount = 0;
+    //used for small break b/w rounds
+    private Handler myHandler = new Handler();
+
+    //sound variables
+    private int soundID;
+    private SoundPool buttonHitSound;
+
+    private SharedPreferences upgradePref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
         //hides actionbar
-        actionbar = getSupportActionBar();
+        ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
-
-        brickBitPref = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
-        leaderBoardPref = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
         upgradePref = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
-
-        brickBitEditor = brickBitPref.edit();
-        leaderBoardEditor = leaderBoardPref.edit();
-        upgradeEditor = upgradePref.edit();
+        upgrades = new Upgrades(upgradePref);
 
         //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
-        roundKeeper = (TextView) findViewById(R.id.roundKeeper);
         timeKeeper = (TextView) findViewById(R.id.timeKeeper);
         brickButton = (ImageButton) findViewById(R.id.brickButton);
+
 
         //initialize brick hit noise
         buttonHitSound = new SoundPool(15, AudioManager.STREAM_MUSIC,1);
@@ -92,16 +93,54 @@ public class PlayActivity extends ActionBarActivity {
         //Grace added:
         brickButton.setOnTouchListener(brickSwipeListener);
 
+        //checks for bomb and nuke upgrade buttons, and sets things accordingly
+        checkAddButtons();
+
         //initializes countdown timer
-        cdTimer = new Timer(10000, 10);
-
-        upgrades = new Upgrades();
-        brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPref);
-
-        checkUpgrades();
+        if (upgrades.getTimerPower()== 1){
+            cdTimer = new Timer(15000, 10);
+            totTime = "15.0";
+        } else {
+            cdTimer = new Timer(10000, 100);
+            totTime = "10.0";
+        }
         newRound();
 
     }
+
+    public void checkAddButtons() {
+        if (upgrades.getBombUpgrade() >= 1){
+            bombButton = (ImageButton) findViewById(R.id.bombButton);
+            bombButton.setVisibility(View.VISIBLE);
+            bombButton.setOnClickListener(bombButtonListener);
+        } else if(upgrades.getNukeUpgrade() >= 1){
+            nukeButton = (ImageButton) findViewById(R.id.nukeButton);
+            nukeButton.setVisibility(View.VISIBLE);
+            nukeButton.setOnClickListener(nukeButtonListener);
+        }
+    }
+
+    View.OnClickListener bombButtonListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            brickObject.setBrickHealth(upgrades.bombPower(brickObject.getCurrentBrickHealth()));
+            bombButton.setVisibility(View.GONE);
+
+            if(brickObject.getCurrentBrickHealth()<=0){
+                endRound();
+            }
+        }
+    };
+
+    View.OnClickListener nukeButtonListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            nukeButton.setVisibility(View.GONE);
+            endRound();
+        }
+    };
 
     //starts every round. Updates round #, creates new brick image, updates brick health
     public void newRound() {
@@ -109,12 +148,11 @@ public class PlayActivity extends ActionBarActivity {
         brickView.setText("" + 0);
         //updates and sets to textview Round count
         roundCount++;
-        roundKeeper.setText("" + roundCount);
         //create and show the new brick
         brickObject=new Brick(roundCount, brickButton);
         showBrick();
         //Shows startTime for Round
-        timeKeeper.setText("10.0");
+        timeKeeper.setText(totTime);
         //starts timer when Start dialog button is clicked
         roundAlert();
     }
@@ -136,6 +174,7 @@ public class PlayActivity extends ActionBarActivity {
                 cdTimer.start();
             }
         });
+
 //Hitting the back button no longer allows a player to play the round with no timer
 //Can either end activity as done here or start the round anyway
         newRoundAlert.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -154,19 +193,6 @@ public class PlayActivity extends ActionBarActivity {
 
     }
 
-    //on a brick hit, play brick hit sound, update tap amount and update brick health
-//    View.OnClickListener brickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Log.d(TAG, " onClick called.");
-//
-//           buttonHitSound.play(soundID,1,1,1,0,1);
-//           if (!endRoundState) {
-//               brickTapSetter(false);
-//               updateBrickHealth(false);
-//           }
-//        }
-//    };
 
     //Grace added brickSwipeListener and got rid of the onClickListener
     //When a brick is swiped, update tap amount and update brick health
@@ -216,7 +242,7 @@ public class PlayActivity extends ActionBarActivity {
     public void updateBrickHealth(boolean swipeOccurred) {
 
         //grace put in the if/else statement
-        if(upgrades.swipingIsEnabled() && swipeOccurred){
+        if((upgrades.getSwipeUpgrade() >= 1) && swipeOccurred){
             Log.d(TAG, "swipe counted ");
             brickObject.setBrickHealth(upgrades.getSwipePower());
         }else{
@@ -234,22 +260,10 @@ public class PlayActivity extends ActionBarActivity {
         brickObject.getBrickButton();
     }
 
-//    //sets brick health each round
-//    public void setHealthMarks() {
-//        if (roundCount == 1){
-//            totalBrickHealth = 3;
-//        }else {
-//            totalBrickHealth = prevRoundHealth + (roundCount + (roundCount - 1));
-//        }
-//        prevRoundHealth = totalBrickHealth;
-//        brickHealth = totalBrickHealth;
-//        twoThirdsHealth = (totalBrickHealth / 3) * 2;
-//        oneThirdHealth = (totalBrickHealth / 3);
-//
-//    }
 
     public void updateScore() {
-        score = (score + 1) + (int) (millis / 1000);
+        score = score + (brickObject.getBrickHits() / 4) + (int) (millis / 1000);
+        score = (int) (score * upgrades.getMoneyPower());
         scoreKeeper.setText("" + score);
     }
 
@@ -260,9 +274,6 @@ public class PlayActivity extends ActionBarActivity {
        endRoundState = true;
        cdTimer.cancel();
        updateScore();
-//       totalBrickHealth = totalBrickHealth + (1 + totalBrickHealth / 2);
-//       brickHealth = totalBrickHealth;
-       //newRound();
         myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -274,19 +285,14 @@ public class PlayActivity extends ActionBarActivity {
     //stores score in shared preference for leaderboard
     //starts alert for Main Menu + leaderboard navigation
     public void endGame() {
-
+        SharedPreferences brickBitPref = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+        BrickBitBank brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPref);
         brickBitsBank.increaseBrickBits(score);
 
-        Toast toast = Toast.makeText(getApplicationContext(), "BrickBits = " + brickBitsBank.getBrickBits(), Toast.LENGTH_SHORT);
-        toast.show();
-
-
-        leaderBoardEditor.putInt("SavedScore", score);
-        leaderBoardEditor.commit();
         final Intent intent = new Intent(PlayActivity.this, LeaderBoard.class);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You Lost!");
-        builder.setMessage("Score: " + score);
+        builder.setTitle("You Lost at round " + roundCount + "!");
+        builder.setMessage("Score: " + score + "\n BrickBits = " + brickBitsBank.getBrickBits());
         builder.setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -297,6 +303,11 @@ public class PlayActivity extends ActionBarActivity {
         builder.setPositiveButton("LeaderBoard", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences leaderBoardPref = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
+                SharedPreferences.Editor leaderBoardEditor;
+                leaderBoardEditor = leaderBoardPref.edit();
+                leaderBoardEditor.putInt("SavedScore", score);
+                leaderBoardEditor.commit();
                 finish();
                 startActivity(intent);
             }
@@ -317,7 +328,7 @@ public class PlayActivity extends ActionBarActivity {
             timeSec = "" + millis / 1000;
             timeMilli = "" + (millis / 100);
             if (timeMilli.length() > 1) {
-                timeMilli = timeMilli.substring(1);
+                timeMilli = timeMilli.substring(timeMilli.length() -1);
             }
             timeKeeper.setText(timeSec + "." + timeMilli);
 
@@ -364,28 +375,5 @@ public class PlayActivity extends ActionBarActivity {
         super.onPause();
         cdTimer.cancel();
     }
-
-    public void checkUpgrades() {
-        Boolean clickPowerBoolean = upgradePref.getBoolean("clickPowerBoolean", false);
-        Boolean swipePowerBoolean = upgradePref.getBoolean("swipePowerBoolean", false);
-        Boolean bombBoolean = upgradePref.getBoolean("bombBoolean", false);
-        Boolean nukeBoolean = upgradePref.getBoolean("nukeBoolean", false);
-        int currencyCount = upgradePref.getInt("currencyInt",0);
-        upgrades.setClickPower(upgradePref);
-        if (swipePowerBoolean){
-            upgrades.setSwipePower();
-        }
-        if (bombBoolean) {
-            int newHealth = upgrades.bombUpgrade(brickObject.getCurrentBrickHealth());
-            brickObject.setBrickHealth(newHealth);
-        }
-        if (nukeBoolean) {
-            brickObject.setBrickHealth(0);
-        }
-
-
-
-    }
-
 
 }

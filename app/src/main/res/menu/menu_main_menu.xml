@@ -5,4 +5,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_reset_upgrades" android:title="@string/action_reset_upgrades"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/plus_brick_bits" android:title="@string/plus_brick_bits"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

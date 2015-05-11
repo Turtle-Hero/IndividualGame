@@ -78,16 +78,21 @@ public class MainMenu extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset_brick_bits) {
-            SharedPreferences upgrades = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
-            SharedPreferences.Editor brickBitEditor = upgrades.edit();
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+            SharedPreferences.Editor brickBitEditor = prefs.edit();
             brickBitEditor.clear();
             brickBitEditor.apply();
         }
         if (id == R.id.action_reset_upgrades) {
-            SharedPreferences upgrades = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
-            SharedPreferences.Editor upgradeEditor = upgrades.edit();
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
+            SharedPreferences.Editor upgradeEditor = prefs.edit();
             upgradeEditor.clear();
             upgradeEditor.apply();
+        }
+        if (id == R.id.plus_brick_bits) {
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+            BrickBitBank brickBitsBank = BrickBitBank.getMainBrickBitBank(prefs);
+            brickBitsBank.increaseBrickBits(500);
         }
 
         return super.onOptionsItemSelected(item);
