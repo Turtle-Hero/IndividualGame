@@ -125,6 +125,10 @@ public class PlayActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
+            soundID = buttonHitSound.load(PlayActivity.this, R.raw.bomb_noise, 1);
+            buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+            soundID = buttonHitSound.load(PlayActivity.this, R.raw.hit_sound, 1);
+
             brickObject.setBrickHealth(upgrades.bombPower(brickObject.getCurrentBrickHealth()));
             bombButton.setVisibility(View.GONE);
 
@@ -138,8 +142,13 @@ public class PlayActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
+            soundID = buttonHitSound.load(PlayActivity.this, R.raw.nuke_noise, 1);
+            buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+            soundID = buttonHitSound.load(PlayActivity.this, R.raw.hit_sound, 1);
+
             brickObject.setBrickHealth(brickObject.getCurrentBrickHealth());
             nukeButton.setVisibility(View.GONE);
+
             endRound();
         }
     };
