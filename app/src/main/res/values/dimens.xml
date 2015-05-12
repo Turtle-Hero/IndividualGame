@@ -8,4 +8,6 @@
     <dimen name="bronze_trophy_padding">20dp</dimen>
     <dimen name="trophy_text_pad">-30dp</dimen>
     <dimen name="menuSpacing">10dp</dimen>
+    <dimen name="upgrade_name">21dp</dimen>
+    <dimen name="upgrade_count">16dp</dimen>
 </resources>

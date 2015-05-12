@@ -28,23 +28,19 @@ public class UpgradesShop extends ActionBarActivity {
     BrickBitBank brickBitsBank;
     TextView brickBitView;
 
-    ImageButton clickPowerButton;
+    ImageButton clickPowerButton, swipeUpgradeButton, bombButton, nukeButton, timerButton, moneyButton;
+
     int clickPowerCount = 1;
-
-    ImageButton swipeUpgradeButton;
     int swipeCount = 0;
-
-    ImageButton bombButton;
     int bombCount = 0;
-
-    ImageButton nukeButton;
     int nukeCount = 0;
-
-    ImageButton timerButton;
     int timerCount = 0;
-
-    ImageButton moneyButton;
     int moneyCount = 0;
+    int price = 0;
+    SharedPreferences upgradePref;
+
+    TextView clickPrice, swipePrice, bombPrice, timerPrice, nukePrice, moneyPrice;
+    TextView clickCountText, swipeCountText, bombCountText, timerCountText, nukeCountText, moneyCountText;
 
     private int soundID;
     private SoundPool buttonHitSound;
@@ -54,13 +50,31 @@ public class UpgradesShop extends ActionBarActivity {
         Log.d("test2", "test2");
         super.onCreate(savedInstanceState);
 
-        SharedPreferences brickBitPrefs = getApplication().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+        SharedPreferences brickBitPrefs = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
+        upgradePref = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
         brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPrefs);
 
         setContentView(R.layout.activity_upgrades_menu);
 
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
+
+        clickPrice = (TextView) findViewById(R.id.clickPrice);
+        swipePrice = (TextView) findViewById(R.id.swipePrice);
+        bombPrice = (TextView) findViewById(R.id.bombPrice);
+        timerPrice = (TextView) findViewById(R.id.timerPrice);
+        nukePrice = (TextView) findViewById(R.id.nukePrice);
+        moneyPrice = (TextView) findViewById(R.id.moneyPrice);
+
+        clickCountText = (TextView) findViewById(R.id.clickCountText);
+        swipeCountText = (TextView) findViewById(R.id.swipeCountText);
+        bombCountText = (TextView) findViewById(R.id.bombCountText);
+        nukeCountText = (TextView) findViewById(R.id.nukeCountText);
+        timerCountText = (TextView) findViewById(R.id.timerCountText);
+        moneyCountText = (TextView) findViewById(R.id.moneyCountText);
+
+
+        setPrices();
 
         buttonHitSound = new SoundPool(8, AudioManager.STREAM_MUSIC,1);
         soundID = buttonHitSound.load(this, R.raw.cash_register, 2);
@@ -85,6 +99,8 @@ public class UpgradesShop extends ActionBarActivity {
 
         moneyButton = (ImageButton) findViewById(R.id.moneyButton);
         moneyButton.setOnClickListener(moneyButtonListener);
+
+
     
     }
 
@@ -94,10 +110,11 @@ public class UpgradesShop extends ActionBarActivity {
             try {
                 brickBitsBank.decreaseBrickBits(increasePrice(100, clickPowerCount - 1));
                 clickPowerCount++;
-                Log.d("TEST", "" + clickPowerCount);
                 changedItem = "clickPowerCount";
                 saveChanges(changedItem, clickPowerCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                clickPrice.setText("$" + increasePrice(100, clickPowerCount - 1));
+                clickCountText.setText("x" + (upgradePref.getInt("clickPowerCount", 1) - 1));
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -115,6 +132,8 @@ public class UpgradesShop extends ActionBarActivity {
                 changedItem = "swipeCount";
                 saveChanges(changedItem, swipeCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                swipePrice.setText("$" + increasePrice(100, swipeCount));
+                swipeCountText.setText("x" + (upgradePref.getInt("swipeCount", 0)));
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -132,6 +151,8 @@ public class UpgradesShop extends ActionBarActivity {
                 changedItem = "bombCount";
                 saveChanges(changedItem, bombCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+               bombPrice.setText("$" + increasePrice(75, bombCount));
+                bombCountText.setText("x" + (upgradePref.getInt("bombCount", 0)));
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -150,6 +171,8 @@ public class UpgradesShop extends ActionBarActivity {
                 changedItem="timerCount";
                 saveChanges(changedItem, timerCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                timerPrice.setText("$" + increasePrice(200, timerCount));
+                timerCountText.setText("x" + (upgradePref.getInt("timerCount", 0)));
             }catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -167,6 +190,8 @@ public class UpgradesShop extends ActionBarActivity {
                 changedItem = "nukeCount";
                 saveChanges(changedItem, nukeCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                nukePrice.setText("$" + increasePrice(250, nukeCount));
+                nukeCountText.setText("x" + (upgradePref.getInt("nukeCount", 0)));
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -185,6 +210,8 @@ public class UpgradesShop extends ActionBarActivity {
                 changedItem="moneyCount";
                 saveChanges(changedItem, moneyCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                moneyPrice.setText("$" + increasePrice(400, moneyCount));
+                moneyCountText.setText("x" + (upgradePref.getInt("moneyCount", 0)));
             } catch (BrickBitBank.InsufficientBrickBitsException e){
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
                 toast.show();
@@ -197,8 +224,7 @@ public class UpgradesShop extends ActionBarActivity {
 
     public void saveChanges(String item, int change) {
         //commits changes to shared preferences
-        SharedPreferences upgradePrefs = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = upgradePrefs.edit();
+        SharedPreferences.Editor editor = upgradePref.edit();
         editor.putInt(item, change);
         editor.commit();
     }
@@ -208,6 +234,22 @@ public class UpgradesShop extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_leader_board, menu);
         return true;
+    }
+
+    public void setPrices() {
+        clickCountText.setText("x" + (upgradePref.getInt("clickPowerCount", 1) - 1));
+        swipeCountText.setText("x" + (upgradePref.getInt("swipeCount", 0)));
+        bombCountText.setText("x" + (upgradePref.getInt("bombCount", 0)));
+        timerCountText.setText("x" + (upgradePref.getInt("timerCount", 0)));
+        nukeCountText.setText("x" + (upgradePref.getInt("nukeCount", 0)));
+        moneyCountText.setText("x" + (upgradePref.getInt("moneyCount", 0)));
+
+        clickPrice.setText("$" + increasePrice(100, upgradePref.getInt("clickPowerCount", 1) - 1));
+        swipePrice.setText("$" + increasePrice(100, upgradePref.getInt("swipeCount", 0)));
+        bombPrice.setText("$" + increasePrice(75, upgradePref.getInt("bombCount", 0)));
+        timerPrice.setText("$" + increasePrice(200, upgradePref.getInt("timerCount", 0)));
+        nukePrice.setText("$" + increasePrice(250, upgradePref.getInt("nukeCount", 0)));
+        moneyPrice.setText("$" + increasePrice(400, upgradePref.getInt("moneyCount", 0)));
     }
 
     public int increasePrice(int oldPrice, int upgradeAmount){

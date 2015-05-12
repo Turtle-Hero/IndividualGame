@@ -60,7 +60,9 @@ public class PlayActivity extends ActionBarActivity {
     private Handler myHandler = new Handler();
 
     //sound variables
-    private int soundID;
+    private int brickID;
+    private int bombID;
+    private int nukeID;
     private SoundPool buttonHitSound;
 
     private SharedPreferences upgradePref;
@@ -84,7 +86,9 @@ public class PlayActivity extends ActionBarActivity {
 
         //initialize brick hit noise
         buttonHitSound = new SoundPool(15, AudioManager.STREAM_MUSIC,1);
-        soundID = buttonHitSound.load(this, R.raw.hit_sound, 1);
+        brickID = buttonHitSound.load(this, R.raw.hit_sound, 1);
+        bombID = buttonHitSound.load(this, R.raw.bomb_noise, 1);
+        nukeID = buttonHitSound.load(this, R.raw.nuke_noise, 1);
 //        brickButton.setOnClickListener(brickListener);
 
         //Grace added:
@@ -122,15 +126,15 @@ public class PlayActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
-            soundID = buttonHitSound.load(PlayActivity.this, R.raw.bomb_noise, 1);
-            buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
-            soundID = buttonHitSound.load(PlayActivity.this, R.raw.hit_sound, 1);
+            if (!endRoundState) {
+                buttonHitSound.play(bombID, 1, 1, 1, 0, 1);
 
-            brickObject.setBrickHealth(upgrades.bombPower(brickObject.getCurrentBrickHealth()));
-            bombButton.setVisibility(View.GONE);
+                brickObject.setBrickHealth(upgrades.bombPower(brickObject.getCurrentBrickHealth() + 1));
+                bombButton.setVisibility(View.GONE);
 
-            if(brickObject.getCurrentBrickHealth()<=0){
-                endRound();
+                if (brickObject.getCurrentBrickHealth() <= 0) {
+                    endRound();
+                }
             }
         }
     };
@@ -139,14 +143,14 @@ public class PlayActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
-            soundID = buttonHitSound.load(PlayActivity.this, R.raw.nuke_noise, 1);
-            buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
-            soundID = buttonHitSound.load(PlayActivity.this, R.raw.hit_sound, 1);
+            if (!endRoundState) {
+                buttonHitSound.play(nukeID, 1, 1, 1, 0, 1);
 
-            brickObject.setBrickHealth(brickObject.getCurrentBrickHealth());
-            nukeButton.setVisibility(View.GONE);
+                brickObject.setBrickHealth(brickObject.getCurrentBrickHealth());
+                nukeButton.setVisibility(View.GONE);
 
-            endRound();
+                endRound();
+            }
         }
     };
 
@@ -156,13 +160,16 @@ public class PlayActivity extends ActionBarActivity {
         brickView.setText("" + 0);
         //updates and sets to textview Round count
         roundCount++;
-        //create and show the new brick
-        brickObject=new Brick(roundCount, brickButton);
-        showBrick();
         //Shows startTime for Round
         timeKeeper.setText(totTime);
+
+        //create and show the new brick
+        brickObject=new Brick(roundCount, brickButton);
         //starts timer when Start dialog button is clicked
         roundAlert();
+        showBrick();
+
+
     }
 
 
@@ -222,14 +229,14 @@ public class PlayActivity extends ActionBarActivity {
 
                 if(((Math.abs(startX - endX) <= 5) && (Math.abs(startY - endY) <=5))) {
                     Log.d(TAG, "click");
-                    buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                    buttonHitSound.play(brickID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
                         updateBrickHealth(false);
                         brickTapSetter();
                     }
                 } else if (((Math.abs(startX - endX) > 5) && (Math.abs(startY - endY) > 5))) {
                     Log.d(TAG, "swipe");
-                    buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
+                    buttonHitSound.play(brickID, 1, 1, 1, 0, 1);
                     if (!endRoundState) {
                         updateBrickHealth(true);
                         brickTapSetter();
