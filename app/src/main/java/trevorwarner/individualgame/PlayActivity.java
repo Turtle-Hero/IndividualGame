@@ -205,7 +205,6 @@ public class PlayActivity extends ActionBarActivity {
     }
 
 
-    //Grace added brickSwipeListener and got rid of the onClickListener
     //When a brick is swiped, update tap amount and update brick health
     View.OnTouchListener brickSwipeListener = new View.OnTouchListener(){
         int startX = 0;
@@ -261,6 +260,9 @@ public class PlayActivity extends ActionBarActivity {
             brickObject.setBrickHealth(upgrades.getClickPower());
         }
 
+
+
+
         if(brickObject.getCurrentBrickHealth()<=0){
             endRound();
         }
@@ -311,6 +313,8 @@ public class PlayActivity extends ActionBarActivity {
             }
         });
 
+        builder.setCancelable(false);
+
         builder.setPositiveButton("LeaderBoard", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -342,7 +346,6 @@ public class PlayActivity extends ActionBarActivity {
                 timeMilli = timeMilli.substring(timeMilli.length() -1);
             }
             timeKeeper.setText(timeSec + "." + timeMilli);
-
         }
 
 
