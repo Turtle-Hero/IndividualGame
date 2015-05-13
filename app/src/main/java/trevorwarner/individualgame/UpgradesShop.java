@@ -73,6 +73,12 @@ public class UpgradesShop extends ActionBarActivity {
         timerCountText = (TextView) findViewById(R.id.timerCountText);
         moneyCountText = (TextView) findViewById(R.id.moneyCountText);
 
+        clickPowerCount = upgradePref.getInt("clickPowerCount", 1);
+        swipeCount = upgradePref.getInt("swipeCount", 0);
+        bombCount = upgradePref.getInt("bombCount", 0);
+        timerCount = upgradePref.getInt("timerCount", 0);
+        nukeCount = upgradePref.getInt("nukeCount", 0);
+        moneyCount = upgradePref.getInt("moneyCount", 0);
 
         setPrices();
 
@@ -226,7 +232,7 @@ public class UpgradesShop extends ActionBarActivity {
         //commits changes to shared preferences
         SharedPreferences.Editor editor = upgradePref.edit();
         editor.putInt(item, change);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -237,19 +243,19 @@ public class UpgradesShop extends ActionBarActivity {
     }
 
     public void setPrices() {
-        clickCountText.setText("x" + (upgradePref.getInt("clickPowerCount", 1) - 1));
-        swipeCountText.setText("x" + (upgradePref.getInt("swipeCount", 0)));
-        bombCountText.setText("x" + (upgradePref.getInt("bombCount", 0)));
-        timerCountText.setText("x" + (upgradePref.getInt("timerCount", 0)));
-        nukeCountText.setText("x" + (upgradePref.getInt("nukeCount", 0)));
-        moneyCountText.setText("x" + (upgradePref.getInt("moneyCount", 0)));
+        clickCountText.setText("x" + (clickPowerCount - 1));
+        swipeCountText.setText("x" + swipeCount);
+        bombCountText.setText("x" + bombCount);
+        timerCountText.setText("x" + timerCount);
+        nukeCountText.setText("x" + nukeCount);
+        moneyCountText.setText("x" + moneyCount);
 
-        clickPrice.setText("$" + increasePrice(100, upgradePref.getInt("clickPowerCount", 1) - 1));
-        swipePrice.setText("$" + increasePrice(100, upgradePref.getInt("swipeCount", 0)));
-        bombPrice.setText("$" + increasePrice(75, upgradePref.getInt("bombCount", 0)));
-        timerPrice.setText("$" + increasePrice(200, upgradePref.getInt("timerCount", 0)));
-        nukePrice.setText("$" + increasePrice(250, upgradePref.getInt("nukeCount", 0)));
-        moneyPrice.setText("$" + increasePrice(400, upgradePref.getInt("moneyCount", 0)));
+        clickPrice.setText("$" + increasePrice(100, clickPowerCount - 1));
+        swipePrice.setText("$" + increasePrice(100, swipeCount));
+        bombPrice.setText("$" + increasePrice(75, bombCount));
+        timerPrice.setText("$" + increasePrice(200, timerCount));
+        nukePrice.setText("$" + increasePrice(250, nukeCount));
+        moneyPrice.setText("$" + increasePrice(400, moneyCount));
     }
 
     public int increasePrice(int oldPrice, int upgradeAmount){

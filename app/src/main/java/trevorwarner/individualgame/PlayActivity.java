@@ -39,7 +39,7 @@ public class PlayActivity extends ActionBarActivity {
     //tracked variables throughout round
     private long score;
     private boolean endRoundState = false;
-    private int roundCount = 0;
+    private int roundCount = 1;
 
     //xml variables
     private TextView brickView;
@@ -105,7 +105,8 @@ public class PlayActivity extends ActionBarActivity {
             cdTimer = new Timer(10000, 100);
             totTime = "10.0";
         }
-        newRound();
+        
+        roundAlert();
 
     }
 
@@ -158,16 +159,14 @@ public class PlayActivity extends ActionBarActivity {
     public void newRound() {
         endRoundState = false;
         brickView.setText("" + 0);
-        //updates and sets to textview Round count
-        roundCount++;
-        //Shows startTime for Round
         timeKeeper.setText(totTime);
+        brickObject=new Brick(roundCount, brickButton);
+        showBrick();
+
+        //updates and sets to textview Round count
+        //Shows startTime for Round
 
         //create and show the new brick
-        brickObject=new Brick(roundCount, brickButton);
-        //starts timer when Start dialog button is clicked
-        roundAlert();
-        showBrick();
 
 
     }
@@ -187,6 +186,7 @@ public class PlayActivity extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 cdTimer.start();
+                newRound();
             }
         });
 
@@ -291,10 +291,11 @@ public class PlayActivity extends ActionBarActivity {
        endRoundState = true;
        cdTimer.cancel();
        updateScore();
-       myHandler.postDelayed(new Runnable() {
+        roundCount++;
+        myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                newRound();
+                roundAlert();
             }
         }, 1000);
     }
