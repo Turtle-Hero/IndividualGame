@@ -92,7 +92,7 @@ public class MainMenu extends ActionBarActivity {
         if (id == R.id.plus_brick_bits) {
             SharedPreferences prefs = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
             BrickBitBank brickBitsBank = BrickBitBank.getMainBrickBitBank(prefs);
-            brickBitsBank.increaseBrickBits(500);
+            brickBitsBank.increaseBrickBits(1000000);
         }
 
         return super.onOptionsItemSelected(item);

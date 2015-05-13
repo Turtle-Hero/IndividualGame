@@ -37,7 +37,7 @@ public class PlayActivity extends ActionBarActivity {
     private Upgrades upgrades;
 
     //tracked variables throughout round
-    private int score;
+    private long score;
     private boolean endRoundState = false;
     private int roundCount = 0;
 
@@ -279,8 +279,8 @@ public class PlayActivity extends ActionBarActivity {
 
 
     public void updateScore() {
-        score = score + (brickObject.getBrickHits() / 4) + (int) (millis / 1000);
-        score = (int) (score * upgrades.getMoneyPower());
+        score = score + (brickObject.getBrickHits() / 4) + (millis / 1000);
+        score = (long) (score * upgrades.getMoneyPower());
         scoreKeeper.setText("" + score);
     }
 
@@ -291,7 +291,7 @@ public class PlayActivity extends ActionBarActivity {
        endRoundState = true;
        cdTimer.cancel();
        updateScore();
-        myHandler.postDelayed(new Runnable() {
+       myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 newRound();
@@ -325,7 +325,7 @@ public class PlayActivity extends ActionBarActivity {
                 SharedPreferences leaderBoardPref = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
                 SharedPreferences.Editor leaderBoardEditor;
                 leaderBoardEditor = leaderBoardPref.edit();
-                leaderBoardEditor.putInt("SavedScore", score);
+                leaderBoardEditor.putLong("SavedScore", score);
                 leaderBoardEditor.commit();
                 finish();
                 startActivity(intent);

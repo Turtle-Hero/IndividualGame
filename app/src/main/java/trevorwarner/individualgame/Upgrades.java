@@ -56,7 +56,7 @@ public class Upgrades {
     public int getMoneyUpgrade(){return moneyCount;}
 
     private double setMoneyPower(){
-        moneyPower = (moneyCount * 0.5) + 1;
+        moneyPower = (moneyCount * 0.1) + 1;
         return moneyPower;
     }
 

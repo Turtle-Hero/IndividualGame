@@ -26,13 +26,13 @@ public class LeaderBoard extends ActionBarActivity {
     String firstVal, secondVal, thirdVal, fourthVal, fifthVal;
     TextView first, second, third, fourth, fifth;
     int nameIndex;
-    int newScore;
+    long newScore;
     String newName;
     ActionBar myBar;
     Button button;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
-    ArrayList<Integer> scoreList = new ArrayList<>();
+    ArrayList<Long> scoreList = new ArrayList<>();
     ArrayList<String> nameList = new CustomStringList();
 
     @Override
@@ -53,7 +53,7 @@ public class LeaderBoard extends ActionBarActivity {
         button = (Button) findViewById(R.id.menuButton);
 
         button.setOnClickListener(menuListener);
-        newScore = prefs.getInt("SavedScore", 0);
+        newScore = prefs.getLong("SavedScore", 0);
         setLeaderBoard();
         setScoreList();
         setNameList();
@@ -70,7 +70,7 @@ public class LeaderBoard extends ActionBarActivity {
 
         first.setText(prefs.getString("SavedFirst", "Trevor 0"));
         second.setText(prefs.getString("SavedSecond", "Omar 0"));
-        third.setText(prefs.getString("SavedThird", "Ben 0"));
+        third.setText(prefs.getString("SavedThird", "Tyrant Ben 0"));
         fourth.setText(prefs.getString("SavedFourth", "Grace 0"));
         fifth.setText(prefs.getString("SavedFifth", "Logan 0"));
     }
@@ -78,19 +78,19 @@ public class LeaderBoard extends ActionBarActivity {
     public void setScoreList() {
         //seperates score from string and adds to array list
         firstVal = first.getText().toString();
-        scoreList.add(Integer.parseInt(firstVal.replaceAll("[^\\d]", "")));
+        scoreList.add(Long.parseLong(firstVal.replaceAll("[^\\d]", "")));
 
         secondVal = second.getText().toString();
-        scoreList.add(Integer.parseInt(secondVal.replaceAll("[^\\d]", "")));
+        scoreList.add(Long.parseLong(secondVal.replaceAll("[^\\d]", "")));
 
         thirdVal = third.getText().toString();
-        scoreList.add(Integer.parseInt(thirdVal.replaceAll("[^\\d]", "")));
+        scoreList.add(Long.parseLong(thirdVal.replaceAll("[^\\d]", "")));
 
         fourthVal = fourth.getText().toString();
-        scoreList.add(Integer.parseInt(fourthVal.replaceAll("[^\\d]", "")));
+        scoreList.add(Long.parseLong(fourthVal.replaceAll("[^\\d]", "")));
 
         fifthVal = fifth.getText().toString();
-        scoreList.add(Integer.parseInt(fifthVal.replaceAll("[^\\d]", "")));
+        scoreList.add(Long.parseLong(fifthVal.replaceAll("[^\\d]", "")));
     }
 
     public void setNameList() {
@@ -141,7 +141,7 @@ public class LeaderBoard extends ActionBarActivity {
         builder.show();
     }
 
-    public void updateScore(int newScore) {
+    public void updateScore(long newScore) {
             if (newScore > scoreList.get(0)) {
                 fifth.setText(nameList.get(3) + scoreList.get(3));
                 fourth.setText(nameList.get(2) + scoreList.get(2));
@@ -213,25 +213,25 @@ public class LeaderBoard extends ActionBarActivity {
             nameList.remove(1);
             nameList.add("placeholder");
             scoreList.remove(1);
-            scoreList.add(0);
+            scoreList.add((long) 0);
             updateScore(newScore);
         } else if (nameIndex == 2 && newScore > scoreList.get(2)) {
             nameList.remove(2);
             nameList.add("placeholder");
             scoreList.remove(2);
-            scoreList.add(0);
+            scoreList.add((long) 0);
             updateScore(newScore);
         } else if (nameIndex == 3 && newScore > scoreList.get(3)) {
             nameList.remove(3);
             nameList.add("placeholder");
             scoreList.remove(3);
-            scoreList.add(0);
+            scoreList.add((long) 0);
             updateScore(newScore);
         } else if (nameIndex == 4 && newScore > scoreList.get(4)) {
             nameList.remove(4);
             nameList.add("placeholder");
             scoreList.remove(4);
-            scoreList.add(0);
+            scoreList.add((long) 0);
             updateScore(newScore);
         }else {
             //if name entered didn't achieve a high score...

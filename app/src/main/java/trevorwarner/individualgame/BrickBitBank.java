@@ -22,15 +22,15 @@ public class BrickBitBank {
         this.sharedPref = prefs;
     }
 
-    public int getBrickBits() {
-        return sharedPref.getInt("BrickBitTotal", 0);
+    public long getBrickBits() {
+        return sharedPref.getLong("BrickBitTotal", 0);
     }
 
-    public void increaseBrickBits(int amountToIncrease) {
+    public void increaseBrickBits(long amountToIncrease) {
         setBrickBits(getBrickBits() + amountToIncrease);
     }
 
-    public void decreaseBrickBits(int amountToDecrease) throws InsufficientBrickBitsException {
+    public void decreaseBrickBits(long amountToDecrease) throws InsufficientBrickBitsException {
         if(getBrickBits() - amountToDecrease < 0) {
             throw new InsufficientBrickBitsException();
         } else {
@@ -40,9 +40,9 @@ public class BrickBitBank {
 
     public void resetBrickBits() { setBrickBits(0);}
 
-    private void setBrickBits(int newValue) {
+    private void setBrickBits(long newValue) {
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("BrickBitTotal", newValue);
+        editor.putLong("BrickBitTotal", newValue);
         editor.commit();
     }
 
