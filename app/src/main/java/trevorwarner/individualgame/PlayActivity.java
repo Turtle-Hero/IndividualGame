@@ -29,6 +29,12 @@ make the brick and (more) cracked brick images.
 -The rubble pile was also taken from http://www.clipartpanda.com/ and modified by me to look like
 brick rubble.
 -The brick hitting noise was taken from freesound.org/people/nextmaking/sounds/86008/?page=1#, from user nextmaking
+-The bomb noise was taken from https://www.freesound.org/people/dkmedic/sounds/104439/, from user dkmedic
+-The nuke noise was taken from https://www.freesound.org/people/Lord%20Razu/sounds/107792/, from user Lord Razu
+-The background music was taken from https://www.freesound.org/people/oceanictrancer/sounds/234276/, from user oceanictrancer
+-The game over noise was taken from https://www.freesound.org/people/SoundEffectsPodcast_com/sounds/256091/,
+    from user SoundEffectsPodcast_com
+
  */
 public class PlayActivity extends ActionBarActivity {
     public static final String TAG = "BrickBash";
@@ -250,14 +256,14 @@ public class PlayActivity extends ActionBarActivity {
 
                 if(((Math.abs(startX - endX) <= 5) && (Math.abs(startY - endY) <=5))) {
                     Log.d(TAG, "click");
-                    buttonHitSound.play(brickID, 1, 1, 1, 0, 1);
+                    buttonHitSound.play(brickID, (float).25, (float).25, 1, 0, 1);
                     if (!endRoundState) {
                         updateBrickHealth(false);
                         brickTapSetter();
                     }
                 } else if (((Math.abs(startX - endX) > 5) && (Math.abs(startY - endY) > 5))) {
                     Log.d(TAG, "swipe");
-                    buttonHitSound.play(brickID, 1, 1, 1, 0, 1);
+                    buttonHitSound.play(brickID, (float).25, (float).25, 1, 0, 1);
                     if (!endRoundState) {
                         updateBrickHealth(true);
                         brickTapSetter();
@@ -300,8 +306,7 @@ public class PlayActivity extends ActionBarActivity {
 
 
     public void updateScore() {
-        score = score + (brickObject.getBrickHits() / 4) + (millis / 1000);
-        score = (long) (score * upgrades.getMoneyPower());
+        score = (long) (score +  ((brickObject.getBrickHits() / 4) + (millis / 1000)* upgrades.getMoneyPower()));
         scoreKeeper.setText("" + score);
     }
 
@@ -422,7 +427,8 @@ public class PlayActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-            mp.release();
+        mp.release();
+        buttonHitSound.release();
 
         cdTimer.cancel();
     }
