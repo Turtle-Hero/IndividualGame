@@ -88,10 +88,6 @@ public class PlayActivity extends ActionBarActivity {
         actionbar.hide();
 
         mp = MediaPlayer.create(this, R.raw.beats);
-        if (mp == null){
-            Toast toast = Toast.makeText(getApplicationContext(), "NULL", Toast.LENGTH_SHORT);
-            toast.show();
-        }
         mp.setLooping(true);
         mp.start();
 

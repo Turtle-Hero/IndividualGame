@@ -133,12 +133,12 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(increasePrice(100, swipeCount));
+                brickBitsBank.decreaseBrickBits(increasePrice(300, swipeCount));
                 swipeCount++;
                 changedItem = "swipeCount";
                 saveChanges(changedItem, swipeCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
-                swipePrice.setText("$" + increasePrice(100, swipeCount));
+                swipePrice.setText("$" + increasePrice(300, swipeCount));
                 swipeCountText.setText("x" + (upgradePref.getInt("swipeCount", 0)));
             } catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
@@ -172,12 +172,12 @@ public class UpgradesShop extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             try {
-                brickBitsBank.decreaseBrickBits(increasePrice(200, timerCount));
+                brickBitsBank.decreaseBrickBits(increasePrice(150, timerCount));
                 timerCount++;
                 changedItem="timerCount";
                 saveChanges(changedItem, timerCount);
                 buttonHitSound.play(soundID, 1, 1, 1, 0, 1);
-                timerPrice.setText("$" + increasePrice(200, timerCount));
+                timerPrice.setText("$" + increasePrice(150, timerCount));
                 timerCountText.setText("x" + (upgradePref.getInt("timerCount", 0)));
             }catch (BrickBitBank.InsufficientBrickBitsException e) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Insufficient BrickBits", Toast.LENGTH_SHORT);
@@ -251,9 +251,9 @@ public class UpgradesShop extends ActionBarActivity {
         moneyCountText.setText("x" + moneyCount);
 
         clickPrice.setText("$" + increasePrice(100, clickPowerCount - 1));
-        swipePrice.setText("$" + increasePrice(100, swipeCount));
+        swipePrice.setText("$" + increasePrice(300, swipeCount));
         bombPrice.setText("$" + increasePrice(75, bombCount));
-        timerPrice.setText("$" + increasePrice(200, timerCount));
+        timerPrice.setText("$" + increasePrice(150, timerCount));
         nukePrice.setText("$" + increasePrice(250, nukeCount));
         moneyPrice.setText("$" + increasePrice(400, moneyCount));
     }
