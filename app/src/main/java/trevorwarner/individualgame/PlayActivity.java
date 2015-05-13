@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
 -The cracked brick image was taken from http://www.clipartpanda.com/, and was modified by me to
@@ -63,21 +65,35 @@ public class PlayActivity extends ActionBarActivity {
     private int brickID;
     private int bombID;
     private int nukeID;
+    private int endID;
     private SoundPool buttonHitSound;
+    private MediaPlayer mp;
 
     private SharedPreferences upgradePref;
+    SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
         //hides actionbar
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
+
+        mp = MediaPlayer.create(this, R.raw.beats);
+        if (mp == null){
+            Toast toast = Toast.makeText(getApplicationContext(), "NULL", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        mp.setLooping(true);
+        mp.start();
+
         upgradePref = getApplicationContext().getSharedPreferences("upgradePref", MODE_PRIVATE);
         upgrades = new Upgrades(upgradePref);
 
-        //initialized textviews
+        edit = upgradePref.edit();
+                //initialized textviews
         brickView = (TextView) findViewById(R.id.brickCount);
         scoreKeeper = (TextView) findViewById(R.id.scoreKeeper);
         timeKeeper = (TextView) findViewById(R.id.timeKeeper);
@@ -89,6 +105,7 @@ public class PlayActivity extends ActionBarActivity {
         brickID = buttonHitSound.load(this, R.raw.hit_sound, 1);
         bombID = buttonHitSound.load(this, R.raw.bomb_noise, 1);
         nukeID = buttonHitSound.load(this, R.raw.nuke_noise, 1);
+        endID = buttonHitSound.load(this, R.raw.gameover, 1);
 //        brickButton.setOnClickListener(brickListener);
 
         //Grace added:
@@ -98,7 +115,7 @@ public class PlayActivity extends ActionBarActivity {
         checkAddButtons();
 
         //initializes countdown timer
-        if (upgrades.getTimerPower()== 1){
+        if (upgrades.getTimerPower()>= 1){
             cdTimer = new Timer(15000, 10);
             totTime = "15.0";
         } else {
@@ -132,6 +149,8 @@ public class PlayActivity extends ActionBarActivity {
 
                 brickObject.setBrickHealth(upgrades.bombPower(brickObject.getCurrentBrickHealth() + 1));
                 bombButton.setVisibility(View.GONE);
+                edit.putInt("bombCount", (upgrades.getBombUpgrade() - 1));
+                edit.apply();
 
                 if (brickObject.getCurrentBrickHealth() <= 0) {
                     endRound();
@@ -149,6 +168,8 @@ public class PlayActivity extends ActionBarActivity {
 
                 brickObject.setBrickHealth(brickObject.getCurrentBrickHealth());
                 nukeButton.setVisibility(View.GONE);
+                edit.putInt("nukeCount", (upgrades.getNukeUpgrade() - 1));
+                edit.apply();
 
                 endRound();
             }
@@ -307,6 +328,15 @@ public class PlayActivity extends ActionBarActivity {
         BrickBitBank brickBitsBank = BrickBitBank.getMainBrickBitBank(brickBitPref);
         brickBitsBank.increaseBrickBits(score);
 
+        if (upgrades.getTimerPower() >= 1){
+            edit.putInt("timerCount", (upgrades.getTimerPower() -1));
+            edit.apply();
+        }
+
+        mp.stop();
+
+        buttonHitSound.play(endID, 1, 1, 1, 0, 1);
+
         final Intent intent = new Intent(PlayActivity.this, LeaderBoard.class);
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("You Lost at round " + roundCount + "!");
@@ -392,6 +422,8 @@ public class PlayActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+            mp.release();
+
         cdTimer.cancel();
     }
 
