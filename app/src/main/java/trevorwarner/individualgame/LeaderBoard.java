@@ -18,45 +18,58 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.List;
 
 //leaderboard 1st place trophy image found from iconFinder.com
 //All trophy images were modified from that image
 public class LeaderBoard extends ActionBarActivity {
 
+    //initializes Strings for string of corresponding textviews
     String firstVal, secondVal, thirdVal, fourthVal, fifthVal;
+    //initializes textViews that display each place
     TextView first, second, third, fourth, fifth;
-    int nameIndex;
-    long newScore;
-    String newName;
+
+    long newScore;  //new score
+    String newName; //newName input by user
     ActionBar myBar;
-    Button button;
-    SharedPreferences.Editor editor;
+    Button button;  //main menu button
+    //initialized shared pref + edit
     SharedPreferences prefs;
-    ArrayList<Long> scoreList = new ArrayList<>();
-    ArrayList<String> nameList = new CustomStringList();
+    SharedPreferences.Editor editor;
+    //initialized score array list + name array list
+    List<Long> scoreList = new ArrayList<>();
+    List<String> nameList = new CustomStringList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //creates leaderboard shared pref + allows to be edited
         prefs = getApplicationContext().getSharedPreferences("leaderBoardPref", MODE_PRIVATE);
         editor = prefs.edit();
         setContentView(R.layout.activity_leader_board);
 
+        //sets actionbar title
         myBar = getSupportActionBar();
         myBar.setTitle("Brick Bash");
 
+        //sets all textviews to corresponding variables
         first = (TextView) findViewById(R.id.firstPlace);
         second = (TextView) findViewById(R.id.secondPlace);
         third = (TextView) findViewById(R.id.thirdPlace);
         fourth = (TextView) findViewById(R.id.fourthPlace);
         fifth = (TextView) findViewById(R.id.fifthPlace);
+        //sets menu button + listener
         button = (Button) findViewById(R.id.menuButton);
-
         button.setOnClickListener(menuListener);
+        //gets new score from save state
         newScore = prefs.getLong("SavedScore", 0);
+        //sets leaderboard display + score/name lists
         setLeaderBoard();
         setScoreList();
         setNameList();
+
+        //if the new score is greater than any of the leaderbaord scores
+        //then start update process
         for(int i = 0; i < scoreList.size(); i++){
            if (newScore > scoreList.get(i)){
                namePrompt();
@@ -65,9 +78,10 @@ public class LeaderBoard extends ActionBarActivity {
         }
     }
 
+    /*
+        sets all textView to saved state
+     */
     public void setLeaderBoard() {
-        //sets all textView to saved state
-
         first.setText(prefs.getString("SavedFirst", "Trevor 0"));
         second.setText(prefs.getString("SavedSecond", "Omar 0"));
         third.setText(prefs.getString("SavedThird", "Tyrant Ben 0"));
@@ -75,8 +89,11 @@ public class LeaderBoard extends ActionBarActivity {
         fifth.setText(prefs.getString("SavedFifth", "Logan 0"));
     }
 
+    /*
+    -gets textview String for each place
+    -adds score to scoreList for each place by removing all non-digit characters from string
+     */
     public void setScoreList() {
-        //seperates score from string and adds to array list
         firstVal = first.getText().toString();
         scoreList.add(Long.parseLong(firstVal.replaceAll("[^\\d]", "")));
 
@@ -93,9 +110,11 @@ public class LeaderBoard extends ActionBarActivity {
         scoreList.add(Long.parseLong(fifthVal.replaceAll("[^\\d]", "")));
     }
 
+    /*
+    -gets textview String for each place
+    -adds name to nameList for each place by removing all digit characters from string
+     */
     public void setNameList() {
-        //seperates name from string and adds to array list
-
         firstVal = first.getText().toString();
         nameList.add(firstVal.replaceAll("[0-9]", ""));
 
@@ -112,6 +131,10 @@ public class LeaderBoard extends ActionBarActivity {
         nameList.add(fifthVal.replaceAll("[0-9]", ""));
     }
 
+    /*
+    creates an alert dialog for getting a user inputed name
+    -on save of name calls validator then updates accordingly
+     */
     public void namePrompt() {
         //creates a dialog box which prompts user for name
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -126,13 +149,18 @@ public class LeaderBoard extends ActionBarActivity {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //adds space to end of name to be comparable to other stored names
                 newName = input.getText().toString() + " ";
+                //if name is validated call 1 of 2 update sequences
                 if (validated(input, newName)) {
+                    //if name already exists, call method which updates that names score
                     if (nameList.contains(newName)) {
                         updateContainsName();
+                    //else call normal score updater
                     } else {
                         updateScore(newScore);
                     }
+                //call namePrompt again if input name contained digits or was too long
                 } else {
                     namePrompt();
                 }
@@ -141,6 +169,11 @@ public class LeaderBoard extends ActionBarActivity {
         builder.show();
     }
 
+    /*
+    -Checks to see which place the new score got
+    -then puts score in that place, and all subsequent places shift down
+    -finally save changes to shared preferences
+     */
     public void updateScore(long newScore) {
             if (newScore > scoreList.get(0)) {
                 fifth.setText(nameList.get(3) + scoreList.get(3));
@@ -163,10 +196,14 @@ public class LeaderBoard extends ActionBarActivity {
             } else {
                 fifth.setText(newName + newScore);
             }
-
         saveChanges();
     }
 
+    /*
+    returns true if name is acceptable
+    -limits character length of name to 12 characters
+    -limits name to only characters (no digits)
+     */
     public boolean validated(EditText input, String name){
         if (name.length() > 13){
             Toast toast = Toast.makeText(getBaseContext(), "Name must be 12 characters or less", Toast.LENGTH_LONG);
@@ -174,9 +211,11 @@ public class LeaderBoard extends ActionBarActivity {
             toast.show();
             return false;
         }
+        //goes through each character of name
         for(int i = 0; i< name.length(); i++){
             char c = name.charAt(i);
 
+            //if a character is a digit, clear the editText and return false
             if(Character.isDigit(c))
             {
                 input.getText().clear();
@@ -190,22 +229,27 @@ public class LeaderBoard extends ActionBarActivity {
         return true;
     }
 
+    /*
+    if name already exists in leaderboard:
+    -find index of name
+    -if the name got a new highscore, remove old score and name position from list
+    -update + reorder list with new items
+     */
     public void updateContainsName() {
-        //if the name is already in the leaderboard
-
-        //nameIndex = nameList.indexOf(newName);
-
+        int nameIndex = 0;
         for (int i = 0; i < nameList.size(); i++){
             if (nameList.get(i).equalsIgnoreCase(newName)){
                 nameIndex = i;
                 break;
             }
         }
-
-        //find index (place) of name
-        //if the entered name got a new highscore, replace old score with new score and re-order
-        //replacing score -> delete score and name from both array lists and add placeholders to avoid indexOutOfBounds
-        //then call updateScore to add newScore and newName to leaderBoard
+        /*
+        -find index (place) of name
+        -if the entered name got a new highscore, replace old score with new score and re-order
+        -replacing score: delete score and name from both array lists
+        -add placeholders to end of both lists to avoid indexOutOfBounds
+        -then call updateScore to add newScore and newName to leaderBoard
+        */
         if (nameIndex == 0 && newScore > scoreList.get(0)){
             first.setText(nameList.get(0) + newScore);
             saveChanges();
@@ -234,7 +278,7 @@ public class LeaderBoard extends ActionBarActivity {
             scoreList.add((long) 0);
             updateScore(newScore);
         }else {
-            //if name entered didn't achieve a high score...
+            //if name entered already exists and didn't achieve a high score...
             Context context = getApplicationContext();
             Toast toast = Toast.makeText(context, "Sorry, " + newName + " did not achieve a new high score", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -242,8 +286,10 @@ public class LeaderBoard extends ActionBarActivity {
         }
     }
 
+    /*
+    commits changes to save state
+     */
     public void saveChanges() {
-        //commits changes to shared preferences
         editor.putString("SavedFirst", first.getText().toString());
         editor.putString("SavedSecond", second.getText().toString());
         editor.putString("SavedThird", third.getText().toString());
@@ -278,7 +324,7 @@ public class LeaderBoard extends ActionBarActivity {
 
                return true;
 
-           case R.id.action_Reset:
+           case R.id.action_Reset:  //resets leaderboard
                editor.clear();
                editor.apply();
                finish();
@@ -290,6 +336,7 @@ public class LeaderBoard extends ActionBarActivity {
     }
 }
 
+//allows names to be compared regardless of case
 class CustomStringList extends ArrayList<String> {
     @Override
     public boolean contains(Object o) {
