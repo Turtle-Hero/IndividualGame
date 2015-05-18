@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * creates the view for the upgrades shop and
+ * maintains the button listeners
  * Created by the_guz on 4/24/15.
  */
 
@@ -109,6 +111,14 @@ public class UpgradesShop extends ActionBarActivity {
 
     
     }
+
+    /**
+     * All the OnClickListeners checks to make sure the player
+     * has sufficient brickBits and deducts the amount
+     * of the upgrade cost if the player has enough birck bits.
+     * It then increases the price and the amount of the upgrade
+     * the player has.
+     */
 
     View.OnClickListener clickPowerListener = new View.OnClickListener(){
         @Override
@@ -227,7 +237,12 @@ public class UpgradesShop extends ActionBarActivity {
     };
 
 
-
+    /**
+     * Saves the changes that the On Click Listener made to the
+     * saved prefrences file.
+     * @param item
+     * @param change
+     */
     public void saveChanges(String item, int change) {
         //commits changes to shared preferences
         SharedPreferences.Editor editor = upgradePref.edit();
@@ -242,6 +257,9 @@ public class UpgradesShop extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * sets the price and amounts in their respective text views
+     */
     public void setPrices() {
         clickCountText.setText("x" + (clickPowerCount - 1));
         swipeCountText.setText("x" + swipeCount);
@@ -258,6 +276,13 @@ public class UpgradesShop extends ActionBarActivity {
         moneyPrice.setText("$" + increasePrice(400, moneyCount));
     }
 
+    /**
+     * Method that increases the price of the upgrades when
+     * an upgrade has been bought.
+     * @param oldPrice
+     * @param upgradeAmount
+     * @return
+     */
     public int increasePrice(int oldPrice, int upgradeAmount){
         if (upgradeAmount == 0){
             return oldPrice;

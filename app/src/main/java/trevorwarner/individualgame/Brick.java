@@ -12,7 +12,12 @@ public class Brick {
     private int brickHits=0;
     private ImageButton brickButton;
 
-
+    /**
+     * Creates a new brick object at the start of the
+     * round with the updated attributes.
+     * @param roundCount
+     * @param brickButton
+     */
     public Brick(int roundCount, ImageButton brickButton){
         this.fullBrickHealth=roundCount*roundCount+2;
         this.currentBrickHealth=fullBrickHealth;
@@ -20,6 +25,10 @@ public class Brick {
         brickButton.setImageResource(R.drawable.brick);
     }
 
+    /**
+     * Sets the health of the brick object
+     * @param clickPower
+     */
     public void setBrickHealth(int clickPower){
         if(clickPower>currentBrickHealth) {
             brickHits += currentBrickHealth;
@@ -31,6 +40,9 @@ public class Brick {
         setBrickButton();
     }
 
+    /**
+     * Updates the brick image to correspond to its health
+     */
     public void setBrickButton(){
         if(currentBrickHealth<=0){
             brickButton.setImageResource(R.drawable.pile_rocks);
@@ -41,10 +53,22 @@ public class Brick {
         }
     }
 
+    /**
+     * returns the current health of the brick
+     * @return
+     */
     public int getCurrentBrickHealth(){return currentBrickHealth;}
 
+    /**
+     * creates the image button that the brick is tied to
+     * @return
+     */
     public ImageButton getBrickButton(){return brickButton;}
 
+    /**
+     * returns the amount of hits on the brick.
+     * @return
+     */
     public int getBrickHits(){return brickHits;}
 
 }

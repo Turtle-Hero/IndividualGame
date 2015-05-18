@@ -3,11 +3,14 @@ package trevorwarner.individualgame;
 import android.content.SharedPreferences;
 
 /**
- * BrickBitBank
+ * BrickBitBank class that manages the amount of Brick Bits
+ * the player has.
  */
 public class BrickBitBank {
 
     private static BrickBitBank mainBank = null;
+
+    private SharedPreferences sharedPref;
 
     public static BrickBitBank getMainBrickBitBank(SharedPreferences prefs) {
         if (mainBank == null) {
@@ -16,20 +19,32 @@ public class BrickBitBank {
         return mainBank;
     }
 
-    private SharedPreferences sharedPref;
 
     private BrickBitBank(SharedPreferences prefs) {
         this.sharedPref = prefs;
     }
 
+    /**
+     * returns the amount of brick bits.
+     * @return
+     */
     public long getBrickBits() {
         return sharedPref.getLong("BrickBitTotal", 0);
     }
 
+    /**
+     * Increases the amount of brick bits in the bank.
+     * @param amountToIncrease
+     */
     public void increaseBrickBits(long amountToIncrease) {
         setBrickBits(getBrickBits() + amountToIncrease);
     }
 
+    /**
+     * Decreases the amount of brick bits in the bank.
+     * @param amountToDecrease
+     * @throws InsufficientBrickBitsException
+     */
     public void decreaseBrickBits(long amountToDecrease) throws InsufficientBrickBitsException {
         if(getBrickBits() - amountToDecrease < 0) {
             throw new InsufficientBrickBitsException();
@@ -38,8 +53,16 @@ public class BrickBitBank {
         }
     }
 
+    /**
+     * resets the amount brick bits
+     */
     public void resetBrickBits() { setBrickBits(0);}
 
+    /**
+     * Updates the shared prefrences file to save the
+     * amount of brick bits.
+     * @param newValue
+     */
     private void setBrickBits(long newValue) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong("BrickBitTotal", newValue);
