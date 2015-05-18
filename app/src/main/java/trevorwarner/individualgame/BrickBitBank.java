@@ -26,7 +26,7 @@ public class BrickBitBank {
 
     /**
      * returns the amount of brick bits.
-     * @return
+     * @return long brickBits
      */
     public long getBrickBits() {
         return sharedPref.getLong("BrickBitTotal", 0);
@@ -53,12 +53,12 @@ public class BrickBitBank {
         }
     }
 
-    /**
+    /*
      * resets the amount brick bits
      */
     public void resetBrickBits() { setBrickBits(0);}
 
-    /**
+    /*
      * Updates the shared prefrences file to save the
      * amount of brick bits.
      * @param newValue
@@ -69,6 +69,7 @@ public class BrickBitBank {
         editor.commit();
     }
 
+    //creates exception when user doesn't have enough brickBits
     public class InsufficientBrickBitsException extends Exception {
 
     }

@@ -21,7 +21,7 @@ import android.widget.Toast;
 /*
 All upgrade Icons were taken from ClipartPanda.com
  */
-    //cash register sound from freesound.org/people/kiddpark/sounds/201159/, from user kiddpark
+//cash register sound from freesound.org/people/kiddpark/sounds/201159/, from user kiddpark
 public class UpgradesShop extends ActionBarActivity {
 
     String changedItem;
@@ -280,9 +280,9 @@ public class UpgradesShop extends ActionBarActivity {
     /**
      * Method that increases the price of the upgrades when
      * an upgrade has been bought.
-     * @param oldPrice
-     * @param upgradeAmount
-     * @return
+     * @param oldPrice is price that upgrade was just bought for
+     * @param upgradeAmount is how many of that upgrade was purchased
+     * @return Int of new price for that upgrade
      */
     public int increasePrice(int oldPrice, int upgradeAmount){
         if (upgradeAmount == 0){

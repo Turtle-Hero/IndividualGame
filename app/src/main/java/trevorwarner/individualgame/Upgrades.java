@@ -20,6 +20,7 @@ public class Upgrades {
     private double moneyPower;
 
     //Upgrade constructor
+    //initializes all upgrade values to variables from shared pref
     public Upgrades (SharedPreferences prefs){
         this.clickCount = prefs.getInt("clickPowerCount", 1);
         this.swipeCount = prefs.getInt("swipeCount", 0);
@@ -36,7 +37,7 @@ public class Upgrades {
      * the brick by the bomb ability and returns that
      * value.
      * @param currentHealth
-     * @return
+     * @return total 'hits' the bomb will do to the brick
      */
     public int bombPower(int currentHealth) {
         int bombDmg = (currentHealth / 3);
@@ -45,20 +46,19 @@ public class Upgrades {
 
     /**
      * Returns the clickPower.
-     * @return
+     * @return Int # of click powers purchased
      */
     public int getClickPower(){return clickCount ;}
 
-    /**
-     * Returns the amount of swipe upgrades bought.
-     * @return
+    /*
+     * @return the amount of swipe upgrades bought.
      */
     public int getSwipeUpgrade() {return swipeCount;}
 
     /**
      * Sets the swipe power depending on amount
      * of swipe upgrades bought.
-     * @return
+     * @return Int power of each swipe
      */
     private int setSwipePower(){
         swipePower = (swipeCount * 2) + 1;
@@ -67,38 +67,38 @@ public class Upgrades {
 
     /**
      * returns the current swipe power.
-     * @return
+     * @return int power of each swipe
      */
     public int getSwipePower(){return swipePower;}
 
     /**
      * returns the amount of bombs bought
-     * @return
+     * @return Int # of bomb upgrades purchased
      */
     public int getBombUpgrade(){return bombPower;}
 
     /**
      * returns the amount of nukes bought
-     * @return
+     * @return Int # of nuke upgrades purchased
      */
     public int getNukeUpgrade(){return nukePower;}
 
     /**
      * returns the amount of timer upgrades
-     * @return
+     * @return Int # of timer upgrades purchased
      */
     public int getTimerPower(){return timerPower;}
 
     /**
      * returns the amount of money upgrades
-     * @return
+     * @return Int # of money upgrades purchased
      */
     public int getMoneyUpgrade(){return moneyCount;}
 
     /**
      * sets the money multiplier used to calculate
      * brick bits.
-     * @return
+     * @return Double value of what the moneyPower multiplier is
      */
     private double setMoneyPower(){
         moneyPower = (moneyCount * 0.1) + 1;
@@ -107,7 +107,7 @@ public class Upgrades {
 
     /**
      * returns the money multiplier
-     * @return
+     * @return Double value of what the moneyPower multiplier is
      */
     public double getMoneyPower(){return moneyPower;}
 
