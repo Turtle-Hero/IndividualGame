@@ -6,7 +6,6 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -38,7 +37,6 @@ public class UpgradesShop extends ActionBarActivity {
     int nukeCount = 0;
     int timerCount = 0;
     int moneyCount = 0;
-    int price = 0;
     SharedPreferences upgradePref;
 
     TextView clickPrice, swipePrice, bombPrice, timerPrice, nukePrice, moneyPrice;
@@ -49,7 +47,6 @@ public class UpgradesShop extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("test2", "test2");
         super.onCreate(savedInstanceState);
 
         SharedPreferences brickBitPrefs = getApplicationContext().getSharedPreferences("brickBitPref", MODE_PRIVATE);
@@ -61,13 +58,13 @@ public class UpgradesShop extends ActionBarActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.hide();
 
+        //initializes all billion textviews
         clickPrice = (TextView) findViewById(R.id.clickPrice);
         swipePrice = (TextView) findViewById(R.id.swipePrice);
         bombPrice = (TextView) findViewById(R.id.bombPrice);
         timerPrice = (TextView) findViewById(R.id.timerPrice);
         nukePrice = (TextView) findViewById(R.id.nukePrice);
         moneyPrice = (TextView) findViewById(R.id.moneyPrice);
-
         clickCountText = (TextView) findViewById(R.id.clickCountText);
         swipeCountText = (TextView) findViewById(R.id.swipeCountText);
         bombCountText = (TextView) findViewById(R.id.bombCountText);
@@ -75,6 +72,7 @@ public class UpgradesShop extends ActionBarActivity {
         timerCountText = (TextView) findViewById(R.id.timerCountText);
         moneyCountText = (TextView) findViewById(R.id.moneyCountText);
 
+        //sets upgrade variables to their save state
         clickPowerCount = upgradePref.getInt("clickPowerCount", 1);
         swipeCount = upgradePref.getInt("swipeCount", 0);
         bombCount = upgradePref.getInt("bombCount", 0);
@@ -82,9 +80,10 @@ public class UpgradesShop extends ActionBarActivity {
         nukeCount = upgradePref.getInt("nukeCount", 0);
         moneyCount = upgradePref.getInt("moneyCount", 0);
 
+        //sets price of each upgrade
         setPrices();
 
-        buttonHitSound = new SoundPool(8, AudioManager.STREAM_MUSIC,1);
+        buttonHitSound = new SoundPool(10, AudioManager.STREAM_MUSIC,1);
         soundID = buttonHitSound.load(this, R.raw.cash_register, 2);
 
         brickBitView = (TextView) findViewById(R.id.brickBitView);
@@ -108,16 +107,18 @@ public class UpgradesShop extends ActionBarActivity {
         moneyButton = (ImageButton) findViewById(R.id.moneyButton);
         moneyButton.setOnClickListener(moneyButtonListener);
 
-
-    
     }
 
     /**
-     * All the OnClickListeners checks to make sure the player
+     * -All the OnClickListeners checks to make sure the player
      * has sufficient brickBits and deducts the amount
      * of the upgrade cost if the player has enough birck bits.
-     * It then increases the price and the amount of the upgrade
-     * the player has.
+     * -Then they call the saveChanges, to save the state of the upgrade
+     * -play the cash register sound
+     * -It then increases the price and the amount of the upgrade
+     * the player has
+     * -also increases how many of those upgrades have been purchased
+     * -finally it also updates how many brickbits the user has
      */
 
     View.OnClickListener clickPowerListener = new View.OnClickListener(){
@@ -258,7 +259,7 @@ public class UpgradesShop extends ActionBarActivity {
     }
 
     /**
-     * sets the price and amounts in their respective text views
+     * sets the price and amounts of each upgrade in their respective text views
      */
     public void setPrices() {
         clickCountText.setText("x" + (clickPowerCount - 1));
@@ -292,5 +293,10 @@ public class UpgradesShop extends ActionBarActivity {
         }
     }
 
+    //releases noise effect from memory
+    protected void onPause() {
+        super.onPause();
+        buttonHitSound.release();
+    }
 
 }
