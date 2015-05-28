@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MainMenu"
+    android:background="#ffa5e6d2">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainMenuLogo"
+        android:src="@drawable/game_image"
+        android:layout_above="@+id/playButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="0">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playButton"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/play_button"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/menuSpacing"
+            android:layout_marginTop="@dimen/menuSpacing" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/LButton"
+                android:src="@drawable/leaderboard"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="@null"
+                android:layout_alignParentBottom="true"
+                android:layout_weight="1"
+                android:layout_marginRight="@dimen/menuSpacing"
+                android:layout_marginLeft="@dimen/menuSpacing"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/menuSpacing" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/UButton"
+                android:layout_alignBottom="@+id/LButton"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/upgradeicon"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:layout_weight="1"
+                android:layout_marginRight="@dimen/menuSpacing"
+                android:layout_marginLeft="@dimen/menuSpacing"
+                android:layout_marginBottom="@dimen/menuSpacing"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
